@@ -1,21 +1,35 @@
-export const diputadosXdepartamento = {
-  "SAN SALVADOR": 24,
-  "SANTA ANA": 7,
-  "SAN MIGUEL": 6,
-  "LA LIBERTAD": 10,
+import { dataByDepartment, dataNodeResiduo } from '../pages'
+
+export const diputadosXdepartamento: { [key: string]: number } = {
+  'SAN SALVADOR': 24,
+  'SANTA ANA': 7,
+  'SAN MIGUEL': 6,
+  'LA LIBERTAD': 10,
   USULUTAN: 5,
   SONSONATE: 6,
-  "LA UNION": 3,
-  "LA PAZ": 4,
+  'LA UNION': 3,
+  'LA PAZ': 4,
   CHALATENANGO: 3,
   CUSCATLAN: 3,
   AHUACHAPAN: 4,
   MORAZAN: 3,
-  "SAN VICENTE": 3,
+  'SAN VICENTE': 3,
   CABAÑAS: 3,
   NACIONAL: 84,
 }
-export function processDepartmentData({ nodes, fieldValue }) {
+
+type PDD = [
+  votosTotal: number,
+  cocienteElectoral: number,
+  totalDiputadosPorCociente: number,
+  totalDiputadosPorResiduo: number,
+  partidosConDiputadosXresiduo: dataNodeResiduo[]
+]
+
+export function processDepartmentData({
+  nodes,
+  fieldValue,
+}: dataByDepartment): PDD {
   const votosTotal = nodes.reduce((total, partido) => {
     return total + partido.votos_partido
   }, 0)
@@ -30,7 +44,7 @@ export function processDepartmentData({ nodes, fieldValue }) {
     diputadosXdepartamento[fieldValue] - totalDiputadosPorCociente
 
   const partidosXresiduo = [...nodes]
-  partidosXresiduo.sort((a, b) => a.residuo < b.residuo)
+  partidosXresiduo.sort((a, b) => b.residuo - a.residuo)
   let partidosConDiputadosXresiduo = []
   let i = 0
   while (i < totalDiputadosPorResiduo) {
