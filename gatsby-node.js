@@ -6,9 +6,10 @@ exports.sourceNodes = ({ actions, createNodeId, createContentDigest }) => {
 
   const file = fs.readFileSync("./voto2021-al.html", { encoding: "utf-8" })
 
-  let script = ch.load(file)("body script:nth-of-type(3)").html()
+  const script = ch.load(file)("body script:nth-of-type(3)").html()
 
   if (!script) return
+
   const data = script
     .split(/\n/g)[3]
     .trimStart()
@@ -28,8 +29,11 @@ exports.sourceNodes = ({ actions, createNodeId, createContentDigest }) => {
     const diputadosXcociente = Math.floor(
       partido.votos_partido / cocienteElectoral
     )
-    const residuo = Math.floor(
-      partido.votos_partido - diputadosXcociente * cocienteElectoral
+    const residuo = parseFloat(
+      (
+        (partido.votos_partido - diputadosXcociente * cocienteElectoral) /
+        cocienteElectoral
+      ).toLocaleString()
     )
     const nodeContent = JSON.stringify({
       ...partido,
