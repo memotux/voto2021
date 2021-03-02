@@ -31,10 +31,11 @@ const IndexPage = () => {
     return total + partido.diputadosXcociente
   }, 0)
   const totalDiputadosPorResiduo = 84 - totalDiputadosPorCociente
-  const partidosXresiduo = partidosAl.sort((a, b) => a.residuo < b.residuo)
+  const partidosXresiduo = [...partidosAl]
+  partidosXresiduo.sort((a, b) => a.residuo < b.residuo)
   let partidosConDiputadosXresiduo = []
   let i = 0
-  while (i <= totalDiputadosPorResiduo) {
+  while (i < totalDiputadosPorResiduo) {
     partidosConDiputadosXresiduo.push({
       ...partidosXresiduo[i],
       diputadosXresiduo: 1,
@@ -75,9 +76,6 @@ const IndexPage = () => {
           <p style={{ fontWeight: "bold" }}>Total</p>
         </div>
         {partidosAl.map((partido, i) => {
-          // const diputadosXresiduo = Math.floor(
-          //   partido.residuo / cocienteElectoral
-          // )
           const currentPartido =
             partidosConDiputadosXresiduo
               .filter(p => p.nom_partido === partido.nom_partido)
@@ -107,11 +105,11 @@ const IndexPage = () => {
                 {currentPartido.residuo.toLocaleString()}
               </p>
               <p style={{ margin: "1rem" }}>
-                {currentPartido.diputadosXresiduo}
+                {currentPartido.diputadosXresiduo || 0}
               </p>
               <p style={{ margin: "1rem" }}>
                 {currentPartido.diputadosXcociente +
-                  currentPartido.diputadosXresiduo}
+                  (currentPartido.diputadosXresiduo || 0)}
               </p>
             </div>
           )
