@@ -15,19 +15,20 @@ module.exports = {
     },
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,
-    `gatsby-plugin-postcss`, // {
-    //   resolve: `gatsby-plugin-manifest`,
-    //   options: {
-    //     name: `voto2021`,
-    //     short_name: `voto2021`,
-    //     start_url: `/`,
-    //     background_color: `#663399`,
-    //     theme_color: `#663399`,
-    //     display: `minimal-ui`,
-    //     icon: `src/images/gatsby-icon.png`, // This path is relative to the root of the site.
-    //   },
-    // },
-    `gatsby-plugin-gatsby-cloud`,
+    `gatsby-plugin-postcss`,
+    {
+      resolve: `gatsby-plugin-manifest`,
+      options: {
+        name: `voto2021`,
+        short_name: `voto2021`,
+        start_url: `/`,
+        background_color: `#312E81`,
+        theme_color: `#312E81`,
+        display: `minimal-ui`,
+        icon: `src/images/logo.png`, // This path is relative to the root of the site.
+      },
+    },
+    // `gatsby-plugin-gatsby-cloud`,
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
     // `gatsby-plugin-offline`,
