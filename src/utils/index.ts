@@ -22,8 +22,7 @@ type PDD = [
   votosTotal: number,
   cocienteElectoral: number,
   totalDiputadosPorCociente: number,
-  totalDiputadosPorResiduo: number,
-  partidosConDiputadosXresiduo: dataNodeResiduo[]
+  totalDiputadosPorResiduo: number
 ]
 
 export function processDepartmentData({
@@ -43,23 +42,10 @@ export function processDepartmentData({
   const totalDiputadosPorResiduo =
     diputadosXdepartamento[fieldValue] - totalDiputadosPorCociente
 
-  const partidosXresiduo = [...nodes]
-  partidosXresiduo.sort((a, b) => b.residuo - a.residuo)
-  let partidosConDiputadosXresiduo = []
-  let i = 0
-  while (i < totalDiputadosPorResiduo) {
-    partidosConDiputadosXresiduo.push({
-      ...partidosXresiduo[i],
-      diputadosXresiduo: 1,
-    })
-    i++
-  }
-
   return [
     votosTotal,
     cocienteElectoral,
     totalDiputadosPorCociente,
     totalDiputadosPorResiduo,
-    partidosConDiputadosXresiduo,
   ]
 }

@@ -64,7 +64,7 @@ exports.sourceNodes = ({ actions, createNodeId, createContentDigest }) => {
 
     const cocienteElectoral = votosTotal / diputadosXdepartamento[segmento]
 
-    parseData.forEach(partido => {
+    const data01 = parseData.map(partido => {
       const diputadosXcociente = Math.floor(
         partido.votos_partido / cocienteElectoral
       )
@@ -74,36 +74,56 @@ exports.sourceNodes = ({ actions, createNodeId, createContentDigest }) => {
           cocienteElectoral
         ).toLocaleString()
       )
-      const nodeContent = JSON.stringify({
+
+      return {
         ...partido,
         diputadosXcociente,
         residuo,
         segmento,
         publicacion: fecha,
+      }
+    })
+
+    const totalDiputadosCociente = data01.reduce(
+      (total, partido) => total + partido.diputadosXcociente,
+      0
+    )
+    const diputadosFaltaAsignar =
+      diputadosXdepartamento[segmento] - totalDiputadosCociente
+
+    const partidosXresiduo = [...data01]
+    partidosXresiduo.sort((a, b) => b.residuo - a.residuo)
+    const data02 = []
+    let count = 0
+    while (diputadosFaltaAsignar && count < diputadosFaltaAsignar) {
+      data02.push({
+        ...partidosXresiduo[count],
+        diputadosXresiduo: 1,
       })
+      count++
+    }
+
+    data01.forEach(partido => {
+      const currentPartido = data02
+        .filter(p => p.nom_partido === partido.nom_partido)
+        .pop() || { ...partido, diputadosXresiduo: 0 }
+
+      const nodeContent = JSON.stringify(currentPartido)
 
       const nodeMeta = {
-        id: createNodeId(`voto2021-al-${segmento}-${partido.nom_partido}`),
+        id: createNodeId(
+          `voto2021-al-${publicacion}${segmento}-${currentPartido.nom_partido}`
+        ),
         parent: null,
         children: [],
         internal: {
           type: `Voto2021`,
           content: nodeContent,
-          contentDigest: createContentDigest(partido),
+          contentDigest: createContentDigest(currentPartido),
         },
       }
 
-      const node = Object.assign(
-        {},
-        {
-          ...partido,
-          diputadosXcociente,
-          residuo,
-          segmento,
-          publicacion: fecha,
-        },
-        nodeMeta
-      )
+      const node = Object.assign({}, currentPartido, nodeMeta)
       createNode(node)
     })
   })

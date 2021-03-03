@@ -10,6 +10,7 @@ export interface dataNode {
   segmento: string
   publicacion?: string
   diputadosXcociente: number
+  diputadosXresiduo: number
   nom_partido: string
   residuo: number
   votos_partido: number
@@ -45,6 +46,7 @@ const IndexPage = () => {
           nodes {
             segmento
             diputadosXcociente
+            diputadosXresiduo
             nom_partido
             residuo
             votos_partido
@@ -60,6 +62,7 @@ const IndexPage = () => {
           segmento
           publicacion
           diputadosXcociente
+          diputadosXresiduo
           nom_partido
           residuo
           votos_partido
@@ -72,12 +75,20 @@ const IndexPage = () => {
     fieldValue: 'NACIONAL',
   })
 
-  const votosPartidoNacional = React.useRef<{ [key: string]: number }>({})
-  const [vpn, setVpn] = React.useState<{ [key: string]: number }>({})
-
-  React.useEffect(() => {
-    setVpn(votosPartidoNacional.current)
-  }, [votosPartidoNacional])
+  const vpn = votoXdepartamentos.reduce<{ [key: string]: number }>(
+    (acc, department) => {
+      department.nodes.forEach(partido => {
+        let key = partido.nom_partido
+        if (!acc[key]) {
+          acc[key] = 0
+        }
+        acc[key] =
+          acc[key] + partido.diputadosXcociente + partido.diputadosXresiduo
+      })
+      return acc
+    },
+    {}
+  )
 
   return (
     <Layout>
@@ -89,9 +100,12 @@ const IndexPage = () => {
       <h3 className="text-center">
         Actualizacion: {nacional.nodes[0].publicacion}
       </h3>
-      <Row cols={4}>
+      <Row cols={5}>
         <Field>
-          <p className="text-xs">D = Diputados</p>
+          <p className="text-xs">D = Diputados Electos</p>
+        </Field>
+        <Field>
+          <p className="text-xs">DCR = Diputados por Cociente y Residuos</p>
         </Field>
         <Field>
           <p className="text-xs">DE = Diputados a Elegir</p>
@@ -110,40 +124,21 @@ const IndexPage = () => {
             <span className="block">
               DE: {(dataNac[2] + dataNac[3]).toLocaleString()}
             </span>
-            {/* <span className="block">CE: {dataNac[1].toLocaleString()}</span> */}
           </Field>
           {nacional.nodes.map(partido => {
-            // const currentPartido: dataNode | dataNodeResiduo =
-            //   dataNac[4]
-            //     .filter(p => p.nom_partido === partido.nom_partido)
-            //     .pop() || partido
-
             return (
               <Field key={`nom-partido-${partido.nom_partido}`}>
                 <p>{partido.nom_partido}</p>
                 <dl className="grid grid-cols-2 justify-items-center place-items-center">
                   <dt>D:</dt>
                   <dd>{vpn[partido.nom_partido]}</dd>
-                  {/* <dt>DC:</dt>
+                  <dt>DCR:</dt>
                   <dd>
-                    {partido.diputadosXcociente +
-                      ((currentPartido as dataNodeResiduo).diputadosXresiduo ||
-                        0)}
-                  </dd> */}
+                    {partido.diputadosXcociente + partido.diputadosXresiduo}
+                  </dd>
                   <dt>VV:</dt>
                   <dd>{partido.votos_partido.toLocaleString()}</dd>
                 </dl>
-                {/* <span className="block">
-                  {vpn && `D: ${vpn[partido.nom_partido]}`}
-                </span>
-                <span className="block">
-                  VV: {partido.votos_partido.toLocaleString()}
-                </span> */}
-                {/* <span className="block">
-                  {partido.diputadosXcociente +
-                    ((currentPartido as dataNodeResiduo).diputadosXresiduo ||
-                      0)}
-                </span> */}
               </Field>
             )
           })}
@@ -166,40 +161,17 @@ const IndexPage = () => {
                   <dt>CE:</dt>
                   <dd>{data[1].toLocaleString()}</dd>
                 </dl>
-                {/* <span className="block">
-                  DE: {(data[2] + data[3]).toLocaleString()}
-                </span>
-                <span className="block">VV: {data[0].toLocaleString()}</span>
-                <span className="block">CE: {data[1].toLocaleString()}</span> */}
               </Field>
               {departamento.nodes.map(partido => {
-                const currentPartido: dataNode | dataNodeResiduo =
-                  data[4]
-                    .filter(p => p.nom_partido === partido.nom_partido)
-                    .pop() || partido
-
-                if (
-                  Object.keys(votosPartidoNacional.current).includes(
-                    partido.nom_partido
-                  )
-                ) {
-                  votosPartidoNacional.current[partido.nom_partido] +=
-                    partido.diputadosXcociente +
-                    ((currentPartido as dataNodeResiduo).diputadosXresiduo || 0)
-                } else {
-                  votosPartidoNacional.current[partido.nom_partido] =
-                    partido.diputadosXcociente +
-                    ((currentPartido as dataNodeResiduo).diputadosXresiduo || 0)
-                }
-
                 return (
                   <Field key={`nom-partido-${partido.nom_partido}`}>
                     <p>{partido.nom_partido}</p>
-                    <span className="block">
-                      {partido.diputadosXcociente +
-                        ((currentPartido as dataNodeResiduo)
-                          .diputadosXresiduo || 0)}
-                    </span>
+                    <dl className="grid grid-cols-2 place-items-center">
+                      <dt>D:</dt>
+                      <dd>
+                        {partido.diputadosXcociente + partido.diputadosXresiduo}
+                      </dd>
+                    </dl>
                   </Field>
                 )
               })}
