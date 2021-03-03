@@ -125,13 +125,15 @@ const IndexPage = () => {
             return (
               <Field key={`nom-partido-${partido.nom_partido}`}>
                 <p>{partido.nom_partido}</p>
-                <dl className="grid grid-cols-2 justify-items-center place-items-center">
+                <dl className="grid grid-cols-2 justify-items-center">
                   <dt>D:</dt>
                   <dd>{vpn[partido.nom_partido]}</dd>
                   <dt>DCR:</dt>
                   <dd>
                     {partido.diputadosXcociente + partido.diputadosXresiduo}
                   </dd>
+                  {/* <dt>R:</dt>
+                  <dd>{partido.residuo.toLocaleString()}</dd> */}
                   <dt>VV:</dt>
                   <dd>{partido.votos_partido.toLocaleString()}</dd>
                 </dl>
@@ -149,7 +151,7 @@ const IndexPage = () => {
             >
               <Field>
                 <h3>{departamento.fieldValue}</h3>
-                <dl className="grid grid-cols-2 justify-items-center place-items-center">
+                <dl className="grid grid-cols-2">
                   <dt>DE:</dt>
                   <dd>{(data[2] + data[3]).toLocaleString()}</dd>
                   <dt>VV:</dt>
@@ -162,11 +164,15 @@ const IndexPage = () => {
                 return (
                   <Field key={`nom-partido-${partido.nom_partido}`}>
                     <p>{partido.nom_partido}</p>
-                    <dl className="grid grid-cols-2 place-items-center">
+                    <dl className="grid grid-cols-2">
                       <dt>D:</dt>
                       <dd>
                         {partido.diputadosXcociente + partido.diputadosXresiduo}
                       </dd>
+                      {/* <dt>R:</dt>
+                      <dd>{partido.residuo.toLocaleString()}</dd>
+                      <dt>VV:</dt>
+                      <dd>{partido.votos_partido.toLocaleString()}</dd> */}
                     </dl>
                   </Field>
                 )

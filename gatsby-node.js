@@ -68,12 +68,8 @@ exports.sourceNodes = ({ actions, createNodeId, createContentDigest }) => {
       const diputadosXcociente = Math.floor(
         partido.votos_partido / cocienteElectoral
       )
-      const residuo = parseFloat(
-        (
-          (partido.votos_partido - diputadosXcociente * cocienteElectoral) /
-          cocienteElectoral
-        ).toLocaleString()
-      )
+      const residuo =
+        partido.votos_partido - diputadosXcociente * cocienteElectoral
 
       return {
         ...partido,
