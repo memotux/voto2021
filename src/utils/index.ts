@@ -1,4 +1,4 @@
-import { dataByDepartment, dataNodeResiduo } from '../pages'
+import { dataByDepartment } from '../pages'
 
 export const diputadosXdepartamento: { [key: string]: number } = {
   'SAN SALVADOR': 24,

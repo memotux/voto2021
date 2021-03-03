@@ -16,10 +16,6 @@ export interface dataNode {
   votos_partido: number
 }
 
-export interface dataNodeResiduo extends dataNode {
-  diputadosXresiduo: number
-}
-
 export interface dataByDepartment {
   nodes: dataNode[]
   fieldValue: string
