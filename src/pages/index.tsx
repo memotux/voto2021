@@ -70,6 +70,13 @@ const IndexPage = () => {
     fieldValue: 'NACIONAL',
   })
 
+  const votosPartidoNacional = React.useRef<{ [key: string]: number }>({})
+  const [vpn, setVpn] = React.useState<{ [key: string]: number }>({})
+
+  React.useEffect(() => {
+    setVpn(votosPartidoNacional.current)
+  }, [votosPartidoNacional])
+
   return (
     <Layout>
       <SEO title="Voto 2021 | Asamblea Legislativa | Datos Preliminares" />
@@ -93,22 +100,23 @@ const IndexPage = () => {
             <span className="block">
               DE: {(dataNac[2] + dataNac[3]).toLocaleString()}
             </span>
-            <span className="block">CE: {dataNac[1].toLocaleString()}</span>
+            {/* <span className="block">CE: {dataNac[1].toLocaleString()}</span> */}
           </Field>
           {nacional.nodes.map(partido => {
-            const currentPartido: dataNode | dataNodeResiduo =
-              dataNac[4]
-                .filter(p => p.nom_partido === partido.nom_partido)
-                .pop() || partido
+            // const currentPartido: dataNode | dataNodeResiduo =
+            //   dataNac[4]
+            //     .filter(p => p.nom_partido === partido.nom_partido)
+            //     .pop() || partido
 
             return (
               <Field key={`nom-partido-${partido.nom_partido}`}>
                 <p>{partido.nom_partido}</p>
-                <span className="block">
+                <span className="block">{vpn && vpn[partido.nom_partido]}</span>
+                {/* <span className="block">
                   {partido.diputadosXcociente +
                     ((currentPartido as dataNodeResiduo).diputadosXresiduo ||
                       0)}
-                </span>
+                </span> */}
               </Field>
             )
           })}
@@ -134,6 +142,20 @@ const IndexPage = () => {
                   data[4]
                     .filter(p => p.nom_partido === partido.nom_partido)
                     .pop() || partido
+
+                if (
+                  Object.keys(votosPartidoNacional.current).includes(
+                    partido.nom_partido
+                  )
+                ) {
+                  votosPartidoNacional.current[partido.nom_partido] +=
+                    partido.diputadosXcociente +
+                    ((currentPartido as dataNodeResiduo).diputadosXresiduo || 0)
+                } else {
+                  votosPartidoNacional.current[partido.nom_partido] =
+                    partido.diputadosXcociente +
+                    ((currentPartido as dataNodeResiduo).diputadosXresiduo || 0)
+                }
 
                 return (
                   <Field key={`nom-partido-${partido.nom_partido}`}>
