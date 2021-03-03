@@ -1,20 +1,20 @@
-const fs = require("fs")
-const ch = require("cheerio")
+const fs = require('fs')
+const ch = require('cheerio')
 
 const diputadosXdepartamento = {
-  "SAN SALVADOR": 24,
-  "SANTA ANA": 7,
-  "SAN MIGUEL": 6,
-  "LA LIBERTAD": 10,
+  'SAN SALVADOR': 24,
+  'SANTA ANA': 7,
+  'SAN MIGUEL': 6,
+  'LA LIBERTAD': 10,
   USULUTAN: 5,
   SONSONATE: 6,
-  "LA UNION": 3,
-  "LA PAZ": 4,
+  'LA UNION': 3,
+  'LA PAZ': 4,
   CHALATENANGO: 3,
   CUSCATLAN: 3,
   AHUACHAPAN: 4,
   MORAZAN: 3,
-  "SAN VICENTE": 3,
+  'SAN VICENTE': 3,
   CABAÑAS: 3,
   NACIONAL: 84,
 }
@@ -22,28 +22,37 @@ const diputadosXdepartamento = {
 exports.sourceNodes = ({ actions, createNodeId, createContentDigest }) => {
   const { createNode } = actions
 
-  const dataFiles = fs.readdirSync("./data/", { encoding: "utf-8" })
+  const dataFiles = fs.readdirSync('./data/', { encoding: 'utf-8' })
 
   dataFiles.forEach(dataFile => {
-    const file = fs.readFileSync(`./data/${dataFile}`, { encoding: "utf-8" })
+    const file = fs.readFileSync(`./data/${dataFile}`, { encoding: 'utf-8' })
 
-    const script = ch.load(file)("body script:nth-of-type(3)").html()
+    const script = ch.load(file)('body script:nth-of-type(3)').html()
 
     if (!script) return
 
     const data = script
-      .split(/\n/g)[5]
+      .split(/\n/g)
+      .filter(v => v.search('dataGraph =') >= 0)
+      .pop()
       .trimStart()
-      .replace(";", "")
-      .split("=")[1]
+      .replace(';', '')
+      .split('=')[1]
       .trim()
 
-    const departamento = script
-      .split(/\n/g)[2]
-      .trimStart()
-      .split("=")[1]
-      .trim()
-      .replace(/'/g, "")
+    const segmento = script
+      .split(/\n/g)
+      .filter(v => v.search('otroTipo =') >= 0)
+      .pop()
+      ? script
+          .split(/\n/g)
+          .filter(v => v.search('otroTipo =') >= 0)
+          .pop()
+          .trimStart()
+          .split('=')[1]
+          .trim()
+          .replace(/'/g, '')
+      : 'NACIONAL'
 
     const parseData = JSON.parse(data)
 
@@ -51,8 +60,7 @@ exports.sourceNodes = ({ actions, createNodeId, createContentDigest }) => {
       return total + partido.votos_partido
     }, 0)
 
-    const cocienteElectoral =
-      votosTotal / diputadosXdepartamento[departamento || "NACIONAL"]
+    const cocienteElectoral = votosTotal / diputadosXdepartamento[segmento]
 
     parseData.forEach(partido => {
       const diputadosXcociente = Math.floor(
@@ -68,11 +76,11 @@ exports.sourceNodes = ({ actions, createNodeId, createContentDigest }) => {
         ...partido,
         diputadosXcociente,
         residuo,
-        departamento,
+        segmento,
       })
 
       const nodeMeta = {
-        id: createNodeId(`voto2021-al-${departamento}-${partido.nom_partido}`),
+        id: createNodeId(`voto2021-al-${segmento}-${partido.nom_partido}`),
         parent: null,
         children: [],
         internal: {
@@ -88,7 +96,7 @@ exports.sourceNodes = ({ actions, createNodeId, createContentDigest }) => {
           ...partido,
           diputadosXcociente,
           residuo,
-          departamento,
+          segmento,
         },
         nodeMeta
       )
