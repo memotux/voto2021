@@ -38,7 +38,6 @@ const IndexPage = () => {
         sort: { fields: votos_partido, order: DESC }
         filter: {
           segmento: { ne: "NACIONAL" }
-          # publicacion: { regex: "/1097/" }
         }
       ) {
         group(field: segmento) {
@@ -58,7 +57,6 @@ const IndexPage = () => {
         sort: { fields: votos_partido, order: DESC }
         filter: {
           segmento: { eq: "NACIONAL" }
-          # publicacion: { regex: "/1097/" }
         }
       ) {
         nodes {
@@ -120,7 +118,48 @@ const IndexPage = () => {
       return acc
     },
     {}
-  )
+  const diputadosSegunMC = [
+    {
+      partido: 'N',
+      diputados: 56
+    },
+    {
+      partido: 'ARENA',
+      diputados: 14
+    },
+    {
+      partido: 'FMLN',
+      diputados: 4
+    },
+    {
+      partido: 'GANA',
+      diputados: 5
+    },
+    {
+      partido: 'PCN',
+      diputados: 2
+    },
+    {
+      partido: 'NUESTRO TIEMPO',
+      diputados: 1
+    },
+    {
+      partido: 'PDC',
+      diputados: 1
+    },
+    {
+      partido: 'VAMOS',
+      diputados: 1
+    },
+    {
+      partido: 'CD',
+      diputados: 0
+    },
+    {
+      partido: 'NP',
+      diputados: 0
+    },
+  ]
 
   return (
     <Layout>
@@ -130,7 +169,7 @@ const IndexPage = () => {
         Total de Votos Validos: {dataNac[0].toLocaleString()}
       </h2>
       <div className="sm:flex sm:justify-center sm:items-center my-4 text-center">
-        <label className="mr-4">Publicacion TSE:</label>
+        <label className="sm:mr-4">Publicacion TSE:</label>
         <select
           defaultValue={publicacion}
           onChange={e => {
@@ -162,7 +201,26 @@ const IndexPage = () => {
           <p className="text-xs">CE = Cociente Electoral</p>
         </Field>
       </Row>
+      <h2 className="text-center">
+        Diputados Electos segun Medios de Comunicacion
+      </h2>
+      <Row cols={diputadosSegunMC.length}>
+        {
+          diputadosSegunMC.map(partido => {
+            retuns (
+              <Field key={`nom-partido-${partido.partido}`}>
+                <p>{partido.partido}</p>
+                <dl className="grid grid-cols-2 justify-items-center">
+                  <dt>D:</dt>
+                  <dd>{partido.diputados}</dd>
+                </dl>
+              </Field>
+            )
+          })
+        }
+      </Row>
       <section className="grid justify-items-center place-items-center w-full divide-blue-900 divide-y-2">
+        <h2 className="text-center">Diputados Electos segun Datos Preliminares TSE</h2>
         <Row cols={nacional.length + 1}>
           <Field>
             <h3>NACIONAL</h3>
