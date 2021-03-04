@@ -5,6 +5,7 @@
   "version": "0.1.0",
   "author": "Kyle Mathews <mathews.kyle@gmail.com>",
   "dependencies": {
+    "@tailwindcss/forms": "^0.2.1",
     "cheerio": "^1.0.0-rc.5",
     "gatsby": "^2.32.8",
     "gatsby-image": "^2.11.0",
