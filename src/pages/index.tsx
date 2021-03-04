@@ -94,7 +94,7 @@ const IndexPage = () => {
         Total de Votos Validos: {dataNac[0].toLocaleString()}
       </h2>
       <h3 className="text-center">
-        Actualizacion: {nacional.nodes[0].publicacion}
+        Publicacion TSE: {nacional.nodes[0].publicacion}
       </h3>
       <Row cols={5}>
         <Field>
