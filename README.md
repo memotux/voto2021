@@ -10,7 +10,7 @@ NINGUNO DE LOS DATOS OFRECIDOS PUEDEN SER CONSIDERADOS COMO OFICIALES. Todo los 
 
 Presentamos al público general nuestras consideraciones ante los datos publicados tanto por el [TSE](https://elecciones2021.tse.gob.sv) como los medios de comunicación nacionales.
 
-Al hacer uso de las publiaciones de resultados preliminares, especialmente para Asamblea Legislativa, hemos encontrado:
+Al hacer uso de las publicaciones de resultados preliminares, especialmente para Asamblea Legislativa, hemos encontrado:
 
 1. Que se han utlizado los datos a nivel nacional de la publicacion: #1097 - 01/03/2021 08:34:00 PM
 2. Que al hacer un calculo de Cociente y Residuos sobre el dato nacional, la cantidad de diputados electos difiere del total de diputados electos por departamento.

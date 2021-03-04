@@ -129,8 +129,8 @@ const IndexPage = () => {
       <h2 className="text-center">
         Total de Votos Validos: {dataNac[0].toLocaleString()}
       </h2>
-      <div className="flex justify-center items-center gap-4 my-4">
-        <label>Publicacion TSE:</label>
+      <div className="sm:flex sm:justify-center sm:items-center my-4 text-center">
+        <label className="mr-4">Publicacion TSE:</label>
         <select
           defaultValue={publicacion}
           onChange={e => {
