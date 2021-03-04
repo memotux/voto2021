@@ -1,9 +1,9 @@
 {
-  "name": "gatsby-starter-default",
+  "name": "voto2021",
   "private": true,
-  "description": "A simple starter to get up and developing quickly with Gatsby",
+  "description": "Votacion 2021, El Salvador",
   "version": "0.1.0",
-  "author": "Kyle Mathews <mathews.kyle@gmail.com>",
+  "author": "Romeo Mendez Fuentes <romeo@mendezfuentes.net>",
   "dependencies": {
     "@tailwindcss/forms": "^0.2.1",
     "cheerio": "^1.0.0-rc.5",
@@ -51,9 +51,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gatsbyjs/gatsby-starter-default"
+    "url": "https://github.com/memotux/voto2021"
   },
   "bugs": {
-    "url": "https://github.com/gatsbyjs/gatsby/issues"
+    "url": "https://github.com/memotux/voto2021/issues"
   }
 }
