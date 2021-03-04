@@ -30,17 +30,21 @@ interface QueryAllVotos {
 
 const IndexPage = () => {
   const {
-    xDepartamento: { group: votoXdepartamentos },
-    nacional,
+    xDepartamento: { group: departmentsGroup },
+    nacional: nacionalGroup,
   } = useStaticQuery<QueryAllVotos>(graphql`
     query VotoDepartamentos {
       xDepartamento: allVoto2021(
         sort: { fields: votos_partido, order: DESC }
-        filter: { segmento: { ne: "NACIONAL" } }
+        filter: {
+          segmento: { ne: "NACIONAL" }
+          # publicacion: { regex: "/1097/" }
+        }
       ) {
         group(field: segmento) {
           nodes {
             segmento
+            publicacion
             diputadosXcociente
             diputadosXresiduo
             nom_partido
@@ -52,7 +56,10 @@ const IndexPage = () => {
       }
       nacional: allVoto2021(
         sort: { fields: votos_partido, order: DESC }
-        filter: { segmento: { eq: "NACIONAL" } }
+        filter: {
+          segmento: { eq: "NACIONAL" }
+          # publicacion: { regex: "/1097/" }
+        }
       ) {
         nodes {
           segmento
@@ -66,8 +73,37 @@ const IndexPage = () => {
       }
     }
   `)
+
+  const [publicacion, setPublicacion] = React.useState('')
+
+  const publicaciones = nacionalGroup.nodes
+    .reduce<string[]>((acc, partido) => {
+      if (partido.publicacion) {
+        if (acc.includes(partido.publicacion)) return [...acc]
+        return [...acc, partido.publicacion]
+      }
+      return acc
+    }, [])
+    .sort((a, b) => (b > a ? -1 : 1))
+
+  if (!publicacion) {
+    setPublicacion(publicaciones.pop() as string)
+  }
+
+  const nacional = nacionalGroup.nodes.filter(
+    partido => partido.publicacion === publicacion
+  )
+  const votoXdepartamentos = departmentsGroup.map(department => {
+    return {
+      ...department,
+      nodes: department.nodes.filter(
+        partido => partido.publicacion === publicacion
+      ),
+    }
+  })
+
   const dataNac = processDepartmentData({
-    nodes: nacional.nodes,
+    nodes: nacional,
     fieldValue: 'NACIONAL',
   })
 
@@ -93,9 +129,22 @@ const IndexPage = () => {
       <h2 className="text-center">
         Total de Votos Validos: {dataNac[0].toLocaleString()}
       </h2>
-      <h3 className="text-center">
-        Publicacion TSE: {nacional.nodes[0].publicacion}
-      </h3>
+      <div className="flex justify-center items-center gap-4 my-4">
+        <label>Publicacion TSE:</label>
+        <select
+          defaultValue={publicacion}
+          onChange={e => {
+            setPublicacion(e.currentTarget.value)
+          }}
+          className="rounded-md bg-indigo-200"
+        >
+          {publicaciones.map(text => (
+            <option key={`publicacion-${text}`} value={text}>
+              {text}
+            </option>
+          ))}
+        </select>
+      </div>
       <Row cols={5}>
         <Field>
           <p className="text-xs">D = Diputados Electos</p>
@@ -114,14 +163,14 @@ const IndexPage = () => {
         </Field>
       </Row>
       <section className="grid justify-items-center place-items-center w-full divide-blue-900 divide-y-2">
-        <Row cols={nacional.nodes.length + 1}>
+        <Row cols={nacional.length + 1}>
           <Field>
             <h3>NACIONAL</h3>
             <span className="block">
               DE: {(dataNac[2] + dataNac[3]).toLocaleString()}
             </span>
           </Field>
-          {nacional.nodes.map(partido => {
+          {nacional.map(partido => {
             return (
               <Field key={`nom-partido-${partido.nom_partido}`}>
                 <p>{partido.nom_partido}</p>

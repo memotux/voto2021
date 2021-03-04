@@ -23,10 +23,10 @@ exports.sourceNodes = ({ actions, createNodeId, createContentDigest }) => {
   const { createNode } = actions
 
   const dataFiles = fs.readdirSync('./data/', { encoding: 'utf-8' })
-  const publicacion = dataFiles[0].split('-')[3].split('.')[0]
 
   dataFiles.forEach(dataFile => {
     const file = fs.readFileSync(`./data/${dataFile}`, { encoding: 'utf-8' })
+    const publicacion = dataFile.split('-').pop().split('.')[0]
 
     const script = ch.load(file)('body script:nth-of-type(3)').html()
     const fecha = ch.load(file)(`option[value="${publicacion}"]`).text()
