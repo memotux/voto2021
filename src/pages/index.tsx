@@ -36,9 +36,7 @@ const IndexPage = () => {
     query VotoDepartamentos {
       xDepartamento: allVoto2021(
         sort: { fields: votos_partido, order: DESC }
-        filter: {
-          segmento: { ne: "NACIONAL" }
-        }
+        filter: { segmento: { ne: "NACIONAL" } }
       ) {
         group(field: segmento) {
           nodes {
@@ -55,9 +53,7 @@ const IndexPage = () => {
       }
       nacional: allVoto2021(
         sort: { fields: votos_partido, order: DESC }
-        filter: {
-          segmento: { eq: "NACIONAL" }
-        }
+        filter: { segmento: { eq: "NACIONAL" } }
       ) {
         nodes {
           segmento
@@ -118,46 +114,47 @@ const IndexPage = () => {
       return acc
     },
     {}
+  )
   const diputadosSegunMC = [
     {
       partido: 'N',
-      diputados: 56
+      diputados: 56,
     },
     {
       partido: 'ARENA',
-      diputados: 14
+      diputados: 14,
     },
     {
       partido: 'FMLN',
-      diputados: 4
+      diputados: 4,
     },
     {
       partido: 'GANA',
-      diputados: 5
+      diputados: 5,
     },
     {
       partido: 'PCN',
-      diputados: 2
+      diputados: 2,
     },
     {
       partido: 'NUESTRO TIEMPO',
-      diputados: 1
+      diputados: 1,
     },
     {
       partido: 'PDC',
-      diputados: 1
+      diputados: 1,
     },
     {
       partido: 'VAMOS',
-      diputados: 1
+      diputados: 1,
     },
     {
       partido: 'CD',
-      diputados: 0
+      diputados: 0,
     },
     {
       partido: 'NP',
-      diputados: 0
+      diputados: 0,
     },
   ]
 
@@ -205,22 +202,22 @@ const IndexPage = () => {
         Diputados Electos segun Medios de Comunicacion
       </h2>
       <Row cols={diputadosSegunMC.length}>
-        {
-          diputadosSegunMC.map(partido => {
-            retuns (
-              <Field key={`nom-partido-${partido.partido}`}>
-                <p>{partido.partido}</p>
-                <dl className="grid grid-cols-2 justify-items-center">
-                  <dt>D:</dt>
-                  <dd>{partido.diputados}</dd>
-                </dl>
-              </Field>
-            )
-          })
-        }
+        {diputadosSegunMC.map(partido => {
+          return(
+            <Field key={`nom-partido-${partido.partido}`}>
+              <p>{partido.partido}</p>
+              <dl className="grid grid-cols-2 justify-items-center">
+                <dt>D:</dt>
+                <dd>{partido.diputados}</dd>
+              </dl>
+            </Field>
+          )
+        })}
       </Row>
       <section className="grid justify-items-center place-items-center w-full divide-blue-900 divide-y-2">
-        <h2 className="text-center">Diputados Electos segun Datos Preliminares TSE</h2>
+        <h2 className="text-center">
+          Diputados Electos segun Datos Preliminares TSE
+        </h2>
         <Row cols={nacional.length + 1}>
           <Field>
             <h3>NACIONAL</h3>
