@@ -158,6 +158,261 @@ const IndexPage = () => {
     },
   ]
 
+  const diputadosXdepartamenotSegunNES = [
+    {
+      nodes: [
+        {
+          partido: 'N',
+          diputados: 2,
+        },
+        {
+          partido: 'PCN',
+          diputados: 1,
+        },
+        {
+          partido: 'COALICIÓN ARENA',
+          diputados: 1,
+        },
+      ],
+      fieldValue: 'AHUACHAPAN',
+    },
+    {
+      nodes: [
+        {
+          partido: 'COALICIÓN N-GANA',
+          diputados: 2,
+        },
+        {
+          partido: 'ARENA',
+          diputados: 1,
+        },
+      ],
+      fieldValue: 'CABAÑAS',
+    },
+    {
+      nodes: [
+        {
+          partido: 'COALICIÓN N-GANA',
+          diputados: 1,
+        },
+
+        {
+          partido: 'COALICIÓN PCN',
+          diputados: 1,
+        },
+
+        {
+          partido: 'N',
+          diputados: 1,
+        },
+      ],
+      fieldValue: 'CHALATENANGO',
+    },
+    {
+      nodes: [
+        {
+          partido: 'COALICIÓN N-GANA',
+          diputados: 0,
+        },
+        {
+          partido: 'N',
+          diputados: 2,
+        },
+        {
+          partido: 'ARENA',
+          diputados: 1,
+        },
+      ],
+      fieldValue: 'CUSCATLAN',
+    },
+    {
+      nodes: [
+        {
+          partido: 'N',
+          diputados: 7,
+        },
+        {
+          partido: 'ARENA',
+          diputados: 2,
+        },
+        {
+          partido: 'GANA',
+          diputados: 1,
+        },
+      ],
+      fieldValue: 'LA LIBERTAD',
+    },
+    {
+      nodes: [
+        {
+          partido: 'N',
+          diputados: 3,
+        },
+        {
+          partido: 'ARENA',
+          diputados: 0,
+        },
+        {
+          partido: 'GANA',
+          diputados: 1,
+        },
+      ],
+      fieldValue: 'LA PAZ',
+    },
+    {
+      nodes: [
+        {
+          partido: 'COALICIÓN N-GANA',
+          diputados: 2,
+        },
+        {
+          partido: 'N',
+          diputados: 0,
+        },
+        {
+          partido: 'ARENA',
+          diputados: 1,
+        },
+      ],
+      fieldValue: 'LA UNION',
+    },
+    {
+      nodes: [
+        {
+          partido: 'N',
+          diputados: 2,
+        },
+        {
+          partido: 'FMLN',
+          diputados: 1,
+        },
+      ],
+      fieldValue: 'MORAZAN',
+    },
+    {
+      nodes: [
+        {
+          partido: 'N',
+          diputados: 3,
+        },
+        {
+          partido: 'PDC',
+          diputados: 1,
+        },
+        {
+          partido: 'FMLN',
+          diputados: 1,
+        },
+        {
+          partido: 'GANA',
+          diputados: 1,
+        },
+      ],
+      fieldValue: 'SAN MIGUEL',
+    },
+    {
+      nodes: [
+        {
+          partido: 'N',
+          diputados: 17,
+        },
+        {
+          partido: 'COALICIÓN ARENA',
+          diputados: 3,
+        },
+        {
+          partido: 'FMLN',
+          diputados: 1,
+        },
+        {
+          partido: 'GANA',
+          diputados: 1,
+        },
+        {
+          partido: 'NUESTRO TIEMPO',
+          diputados: 1,
+        },
+        {
+          partido: 'VAMOS',
+          diputados: 1,
+        },
+      ],
+      fieldValue: 'SAN SALVADOR',
+    },
+    {
+      nodes: [
+        {
+          partido: 'COALICIÓN N-GANA',
+          diputados: 2,
+        },
+        {
+          partido: 'N',
+          diputados: 0,
+        },
+        {
+          partido: 'COALICIÓN ARENA-PCN',
+          diputados: 1,
+        },
+      ],
+      fieldValue: 'SAN VICENTE',
+    },
+    {
+      nodes: [
+        {
+          partido: 'N',
+          diputados: 5,
+        },
+        {
+          partido: 'ARENA',
+          diputados: 1,
+        },
+        {
+          partido: 'GANA',
+          diputados: 1,
+        },
+      ],
+      fieldValue: 'SANTA ANA',
+    },
+    {
+      nodes: [
+        {
+          partido: 'N',
+          diputados: 4,
+        },
+        {
+          partido: 'ARENA',
+          diputados: 1,
+        },
+        {
+          partido: 'GANA',
+          diputados: 1,
+        },
+      ],
+      fieldValue: 'SONSONATE',
+    },
+    {
+      nodes: [
+        {
+          partido: 'N',
+          diputados: 3,
+        },
+        {
+          partido: 'FMLN',
+          diputados: 0,
+        },
+        {
+          partido: 'ARENA',
+          diputados: 1,
+        },
+        {
+          partido: 'GANA',
+          diputados: 1,
+        },
+      ],
+      fieldValue: 'USULUTAN',
+    },
+  ]
+
   return (
     <Layout>
       <SEO title="Voto 2021 | Asamblea Legislativa | Datos Preliminares" />
@@ -181,12 +436,17 @@ const IndexPage = () => {
           ))}
         </select>
       </div>
-      <Row cols={5}>
+      <Row cols={6}>
         <Field>
           <p className="text-xs">D = Diputados Electos</p>
         </Field>
         <Field>
           <p className="text-xs">DCR = Diputados por Cociente y Residuos</p>
+        </Field>
+        <Field>
+          <p className="text-xs">
+            DNES = Diputados segun Noticiero El Salvador
+          </p>
         </Field>
         <Field>
           <p className="text-xs">DE = Diputados a Elegir</p>
@@ -203,7 +463,7 @@ const IndexPage = () => {
       </h2>
       <Row cols={diputadosSegunMC.length}>
         {diputadosSegunMC.map(partido => {
-          return(
+          return (
             <Field key={`nom-partido-${partido.partido}`}>
               <p>{partido.partido}</p>
               <dl className="grid grid-cols-2 justify-items-center">
@@ -215,9 +475,7 @@ const IndexPage = () => {
         })}
       </Row>
       <section className="grid justify-items-center place-items-center w-full divide-blue-900 divide-y-2">
-        <h2 className="text-center">
-          Diputados Electos segun Datos Preliminares TSE
-        </h2>
+        <h2 className="text-center">Diputados Electos a Nivel Nacional</h2>
         <Row cols={nacional.length + 1}>
           <Field>
             <h3>NACIONAL</h3>
@@ -245,8 +503,10 @@ const IndexPage = () => {
             )
           })}
         </Row>
-        {votoXdepartamentos.map(departamento => {
+        <h2 className="text-center">Diputados Electos por Departamento</h2>
+        {votoXdepartamentos.map((departamento, i) => {
           const data = processDepartmentData(departamento)
+          const dnes = diputadosXdepartamenotSegunNES[i]
 
           return (
             <Row
@@ -265,6 +525,12 @@ const IndexPage = () => {
                 </dl>
               </Field>
               {departamento.nodes.map(partido => {
+                const dpnes = dnes.nodes.filter(
+                  p => p.partido === partido.nom_partido
+                ).length
+                  ? dnes.nodes.filter(p => p.partido === partido.nom_partido)
+                  : null
+
                 return (
                   <Field key={`nom-partido-${partido.nom_partido}`}>
                     <p>{partido.nom_partido}</p>
@@ -273,6 +539,12 @@ const IndexPage = () => {
                       <dd>
                         {partido.diputadosXcociente + partido.diputadosXresiduo}
                       </dd>
+                      {
+                        <>
+                          <dt>DNES:</dt>
+                          <dd>{dpnes ? dpnes[0].diputados : 0}</dd>
+                        </>
+                      }
                       {/* <dt>R:</dt>
                       <dd>{partido.residuo.toLocaleString()}</dd>
                       <dt>VV:</dt>
@@ -284,6 +556,33 @@ const IndexPage = () => {
             </Row>
           )
         })}
+        {/* <h2 className="text-center">
+          Diputados Electos segun Datos Noticiero El Salvador (Canal 10) por
+          Departamento
+        </h2>
+        {diputadosXdepartamenotSegunNES.map(departamento => {
+          return (
+            <Row
+              key={`votacion-${departamento.fieldValue}`}
+              cols={departamento.nodes.length + 1}
+            >
+              <Field>
+                <h3>{departamento.fieldValue}</h3>
+              </Field>
+              {departamento.nodes.map(partido => {
+                return (
+                  <Field key={`nom-partido-${partido.partido}`}>
+                    <p>{partido.partido}</p>
+                    <dl className="grid grid-cols-2">
+                      <dt>D:</dt>
+                      <dd>{partido.diputados}</dd>
+                    </dl>
+                  </Field>
+                )
+              })}
+            </Row>
+          )
+        })}*/}
       </section>
     </Layout>
   )
