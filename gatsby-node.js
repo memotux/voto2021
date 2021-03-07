@@ -1,83 +1,30 @@
 const fs = require('fs')
 const ch = require('cheerio')
+const processData = require('./processData')
 
-const diputadosXdepartamento = {
-  'SAN SALVADOR': 24,
-  'SANTA ANA': 7,
-  'SAN MIGUEL': 6,
-  'LA LIBERTAD': 10,
-  USULUTAN: 5,
-  SONSONATE: 6,
-  'LA UNION': 3,
-  'LA PAZ': 4,
-  CHALATENANGO: 3,
-  CUSCATLAN: 3,
-  AHUACHAPAN: 4,
-  MORAZAN: 3,
-  'SAN VICENTE': 3,
-  CABAÑAS: 3,
-  NACIONAL: 84,
-}
+const { diputadosXdepartamento } = processData
 
 exports.sourceNodes = ({ actions, createNodeId, createContentDigest }) => {
   const { createNode } = actions
 
-  const dataFiles = fs.readdirSync('./data/', { encoding: 'utf-8' })
+  const dataPreliminar = processData.epreliminar()
+  const dataFinal = processData.efinal()
 
-  dataFiles.forEach(dataFile => {
-    const file = fs.readFileSync(`./data/${dataFile}`, { encoding: 'utf-8' })
-    const publicacion = dataFile.split('-').pop().split('.')[0]
-
-    const script = ch.load(file)('body script:nth-of-type(3)').html()
-    const fecha = ch.load(file)(`option[value="${publicacion}"]`).text()
-
-    if (!script) return
-
-    const data = script
-      .split(/\n/g)
-      .filter(v => v.search('dataGraph =') >= 0)
-      .pop()
-      .trimStart()
-      .replace(';', '')
-      .split('=')[1]
-      .trim()
-
-    const segmento = script
-      .split(/\n/g)
-      .filter(v => v.search('otroTipo =') >= 0)
-      .pop()
-      ? script
-          .split(/\n/g)
-          .filter(v => v.search('otroTipo =') >= 0)
-          .pop()
-          .trimStart()
-          .split('=')[1]
-          .trim()
-          .replace(/'/g, '')
-      : 'NACIONAL'
-
-    const parseData = JSON.parse(data)
-
-    const votosTotal = parseData.reduce((total, partido) => {
+  const processNode = dataFile => {
+    const votosTotal = dataFile.reduce((total, partido) => {
       return total + partido.votos_partido
     }, 0)
 
-    const cocienteElectoral = votosTotal / diputadosXdepartamento[segmento]
-
-    const data01 = parseData.map(partido => {
+    const data01 = dataFile.map(partido => {
+      const cocienteElectoral =
+        votosTotal / diputadosXdepartamento[partido.segmento]
       const diputadosXcociente = Math.floor(
         partido.votos_partido / cocienteElectoral
       )
-      const residuo =
-        partido.votos_partido - diputadosXcociente * cocienteElectoral
+      const residuo = partido.votos_partido % cocienteElectoral
+      // partido.votos_partido - diputadosXcociente * cocienteElectoral
 
-      return {
-        ...partido,
-        diputadosXcociente,
-        residuo,
-        segmento,
-        publicacion: fecha,
-      }
+      return Object.assign({ diputadosXcociente, residuo }, partido)
     })
 
     const totalDiputadosCociente = data01.reduce(
@@ -85,30 +32,31 @@ exports.sourceNodes = ({ actions, createNodeId, createContentDigest }) => {
       0
     )
     const diputadosFaltaAsignar =
-      diputadosXdepartamento[segmento] - totalDiputadosCociente
+      diputadosXdepartamento[dataFile[0].segmento] - totalDiputadosCociente
 
     const partidosXresiduo = [...data01]
     partidosXresiduo.sort((a, b) => b.residuo - a.residuo)
     const data02 = []
     let count = 0
     while (diputadosFaltaAsignar && count < diputadosFaltaAsignar) {
-      data02.push({
-        ...partidosXresiduo[count],
-        diputadosXresiduo: 1,
-      })
+      data02.push(
+        Object.assign({ diputadosXresiduo: 1 }, partidosXresiduo[count])
+      )
       count++
     }
 
     data01.forEach(partido => {
-      const currentPartido = data02
-        .filter(p => p.nom_partido === partido.nom_partido)
-        .pop() || { ...partido, diputadosXresiduo: 0 }
+      const currentPartido = Object.assign(
+        { diputadosXresiduo: 0 },
+        data02.filter(p => p.nom_partido === partido.nom_partido).pop(),
+        partido
+      )
 
       const nodeContent = JSON.stringify(currentPartido)
 
       const nodeMeta = {
         id: createNodeId(
-          `voto2021-al-${publicacion}${segmento}-${currentPartido.nom_partido}`
+          `voto2021-al-${currentPartido.publicacion}${currentPartido.segmento}-${currentPartido.nom_partido}`
         ),
         parent: null,
         children: [],
@@ -122,5 +70,8 @@ exports.sourceNodes = ({ actions, createNodeId, createContentDigest }) => {
       const node = Object.assign({}, currentPartido, nodeMeta)
       createNode(node)
     })
-  })
+  }
+
+  dataPreliminar.forEach(processNode)
+  dataFinal.forEach(processNode)
 }

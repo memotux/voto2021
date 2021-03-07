@@ -1,7 +1,7 @@
 module.exports = {
   siteMetadata: {
-    title: `Voto 2021`,
-    description: `Voto 2021 | Resultados Preliminares | Asamblea Legislativa`,
+    title: `Voto 2021 | Asamblea Legislativa`,
+    description: `Voto 2021, Asamblea Legislativa,  Resultados Preliminares y Finales. Se exponen inconsistencias con las publicaciones de Medios de Comunicación.`,
     author: `@memotux`,
   },
   plugins: [
