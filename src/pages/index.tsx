@@ -5,6 +5,7 @@ import SEO from '../components/seo'
 import Row from '../components/Row'
 import Field from '../components/Field'
 import { processDepartmentData } from '../utils'
+import { diputadosSegunMC, diputadosXdepartamenotSegunNES } from '../../data/mc'
 
 export interface dataNode {
   segmento: string
@@ -33,10 +34,20 @@ const IndexPage = () => {
     xDepartamento: { group: departmentsGroup },
     nacional: nacionalGroup,
   } = useStaticQuery<QueryAllVotos>(graphql`
-    query VotoDepartamentos {
+    query VotoDepartamentos(
+      $nin: [String] = [
+        "NULOS"
+        "IMPUGNADOS"
+        "ABSTENCIONES"
+        "INUTILIZADAS"
+        "SOBRANTES"
+        "VOTO CRUZADO"
+        "FALTANTES"
+      ]
+    ) {
       xDepartamento: allVoto2021(
         sort: { fields: votos_partido, order: DESC }
-        filter: { segmento: { ne: "NACIONAL" } }
+        filter: { segmento: { ne: "NACIONAL" }, nom_partido: { nin: $nin } }
       ) {
         group(field: segmento) {
           nodes {
@@ -53,7 +64,7 @@ const IndexPage = () => {
       }
       nacional: allVoto2021(
         sort: { fields: votos_partido, order: DESC }
-        filter: { segmento: { eq: "NACIONAL" } }
+        filter: { segmento: { eq: "NACIONAL" }, nom_partido: { nin: $nin } }
       ) {
         nodes {
           segmento
@@ -115,303 +126,6 @@ const IndexPage = () => {
     },
     {}
   )
-  const diputadosSegunMC = [
-    {
-      partido: 'N',
-      diputados: 56,
-    },
-    {
-      partido: 'ARENA',
-      diputados: 14,
-    },
-    {
-      partido: 'FMLN',
-      diputados: 4,
-    },
-    {
-      partido: 'GANA',
-      diputados: 5,
-    },
-    {
-      partido: 'PCN',
-      diputados: 2,
-    },
-    {
-      partido: 'NUESTRO TIEMPO',
-      diputados: 1,
-    },
-    {
-      partido: 'PDC',
-      diputados: 1,
-    },
-    {
-      partido: 'VAMOS',
-      diputados: 1,
-    },
-    {
-      partido: 'CD',
-      diputados: 0,
-    },
-    {
-      partido: 'NP',
-      diputados: 0,
-    },
-  ]
-
-  const diputadosXdepartamenotSegunNES = [
-    {
-      nodes: [
-        {
-          partido: 'N',
-          diputados: 2,
-        },
-        {
-          partido: 'PCN',
-          diputados: 1,
-        },
-        {
-          partido: 'COALICIÓN ARENA',
-          diputados: 1,
-        },
-      ],
-      fieldValue: 'AHUACHAPAN',
-    },
-    {
-      nodes: [
-        {
-          partido: 'COALICIÓN N-GANA',
-          diputados: 2,
-        },
-        {
-          partido: 'ARENA',
-          diputados: 1,
-        },
-      ],
-      fieldValue: 'CABAÑAS',
-    },
-    {
-      nodes: [
-        {
-          partido: 'COALICIÓN N-GANA',
-          diputados: 1,
-        },
-
-        {
-          partido: 'COALICIÓN PCN',
-          diputados: 1,
-        },
-
-        {
-          partido: 'N',
-          diputados: 1,
-        },
-      ],
-      fieldValue: 'CHALATENANGO',
-    },
-    {
-      nodes: [
-        {
-          partido: 'COALICIÓN N-GANA',
-          diputados: 0,
-        },
-        {
-          partido: 'N',
-          diputados: 2,
-        },
-        {
-          partido: 'ARENA',
-          diputados: 1,
-        },
-      ],
-      fieldValue: 'CUSCATLAN',
-    },
-    {
-      nodes: [
-        {
-          partido: 'N',
-          diputados: 7,
-        },
-        {
-          partido: 'ARENA',
-          diputados: 2,
-        },
-        {
-          partido: 'GANA',
-          diputados: 1,
-        },
-      ],
-      fieldValue: 'LA LIBERTAD',
-    },
-    {
-      nodes: [
-        {
-          partido: 'N',
-          diputados: 3,
-        },
-        {
-          partido: 'ARENA',
-          diputados: 0,
-        },
-        {
-          partido: 'GANA',
-          diputados: 1,
-        },
-      ],
-      fieldValue: 'LA PAZ',
-    },
-    {
-      nodes: [
-        {
-          partido: 'COALICIÓN N-GANA',
-          diputados: 2,
-        },
-        {
-          partido: 'N',
-          diputados: 0,
-        },
-        {
-          partido: 'ARENA',
-          diputados: 1,
-        },
-      ],
-      fieldValue: 'LA UNION',
-    },
-    {
-      nodes: [
-        {
-          partido: 'N',
-          diputados: 2,
-        },
-        {
-          partido: 'FMLN',
-          diputados: 1,
-        },
-      ],
-      fieldValue: 'MORAZAN',
-    },
-    {
-      nodes: [
-        {
-          partido: 'N',
-          diputados: 3,
-        },
-        {
-          partido: 'PDC',
-          diputados: 1,
-        },
-        {
-          partido: 'FMLN',
-          diputados: 1,
-        },
-        {
-          partido: 'GANA',
-          diputados: 1,
-        },
-      ],
-      fieldValue: 'SAN MIGUEL',
-    },
-    {
-      nodes: [
-        {
-          partido: 'N',
-          diputados: 17,
-        },
-        {
-          partido: 'COALICIÓN ARENA',
-          diputados: 3,
-        },
-        {
-          partido: 'FMLN',
-          diputados: 1,
-        },
-        {
-          partido: 'GANA',
-          diputados: 1,
-        },
-        {
-          partido: 'NUESTRO TIEMPO',
-          diputados: 1,
-        },
-        {
-          partido: 'VAMOS',
-          diputados: 1,
-        },
-      ],
-      fieldValue: 'SAN SALVADOR',
-    },
-    {
-      nodes: [
-        {
-          partido: 'COALICIÓN N-GANA',
-          diputados: 2,
-        },
-        {
-          partido: 'N',
-          diputados: 0,
-        },
-        {
-          partido: 'COALICIÓN ARENA-PCN',
-          diputados: 1,
-        },
-      ],
-      fieldValue: 'SAN VICENTE',
-    },
-    {
-      nodes: [
-        {
-          partido: 'N',
-          diputados: 5,
-        },
-        {
-          partido: 'ARENA',
-          diputados: 1,
-        },
-        {
-          partido: 'GANA',
-          diputados: 1,
-        },
-      ],
-      fieldValue: 'SANTA ANA',
-    },
-    {
-      nodes: [
-        {
-          partido: 'N',
-          diputados: 4,
-        },
-        {
-          partido: 'ARENA',
-          diputados: 1,
-        },
-        {
-          partido: 'GANA',
-          diputados: 1,
-        },
-      ],
-      fieldValue: 'SONSONATE',
-    },
-    {
-      nodes: [
-        {
-          partido: 'N',
-          diputados: 3,
-        },
-        {
-          partido: 'FMLN',
-          diputados: 0,
-        },
-        {
-          partido: 'ARENA',
-          diputados: 1,
-        },
-        {
-          partido: 'GANA',
-          diputados: 1,
-        },
-      ],
-      fieldValue: 'USULUTAN',
-    },
-  ]
 
   return (
     <Layout>
