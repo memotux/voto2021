@@ -122,7 +122,7 @@ export const Escrutinio: React.FC<{
 
   return (
     <Layout>
-      <SEO title="Escrutinio ${tipo} " />
+      <SEO title={`Escrutinio ${tipo} `} />
       <h1 className="text-center">Escrutinio {tipo}</h1>
       <h2 className="text-center">
         Total Votos Válidos: {dataSegment[0].toLocaleString()}

@@ -14,7 +14,7 @@ const Header = ({ siteTitle }: { siteTitle: string }) => (
       <Link to="/" activeClassName="active-link">
         Final
       </Link>
-      <Link to="/escrutinio-preliminar" activeClassName="active-link">
+      <Link to="/preliminar" activeClassName="active-link">
         Preliminar
       </Link>
       {/* <Link to="#">Inconsistencias</Link> */}
