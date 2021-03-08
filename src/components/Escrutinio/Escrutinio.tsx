@@ -6,10 +6,8 @@ import {
 } from '../../../data/mc'
 import { dataByDepartment, dataNode } from '../../pages'
 import { PDD, processDepartmentData } from '../../utils'
-import Field from '../Field'
 import Layout from '../layout'
 import Leyendas from './Leyendas'
-import Row from '../Row'
 import Selector from '../Selector'
 import SEO from '../seo'
 
@@ -127,9 +125,12 @@ export const Escrutinio: React.FC<{
       <h2 className="text-center">
         Total Votos Válidos: {dataSegment[0].toLocaleString()}
       </h2>
-      <Row cols={2}>
-        <Field>
-          <label htmlFor="segmento" className="sm:mr-4">
+      <div
+        className={`sm:grid sm:justify-items-center sm:place-items-center w-full p-4 sm:overflow-x-auto sm:space-x-4`}
+        style={{ gridTemplateColumns: `repeat(2, minmax(150px, 1fr))` }}
+      >
+        <div className="text-center mb-2">
+          <label htmlFor="segmento" className="block md:inline sm:mr-4">
             Segmento:
           </label>
           <Selector
@@ -139,9 +140,9 @@ export const Escrutinio: React.FC<{
             options={segmentos}
             defaultValue={segmento}
           />
-        </Field>
-        <Field>
-          <label htmlFor="publicacion" className="sm:mr-4">
+        </div>
+        <div className="text-center">
+          <label htmlFor="publicacion" className="block md:inline sm:mr-4">
             Publicaciones:
           </label>
           <Selector
@@ -158,18 +159,25 @@ export const Escrutinio: React.FC<{
               }
             })}
           />
-        </Field>
-      </Row>
-      <Leyendas />
+        </div>
+      </div>
       {tipo === 'Final' ? (
         <p className="max-w-3xl mx-auto my-4 p-4 border border-blue-900 rounded-md">
-          <span className="font-bold">Nota:</span> Al momento de hacer un
-          análisis de la información presente, tomar en cuenta lo siguiente: Si
-          bien se presentan datos del Escrutinio Final, consideramos que la
-          cantidad de Actas Escrutadas en este momento no son suficientes para
-          reflejar una tendencia en la votación.
+          <span className="font-bold">Nota:</span> El{' '}
+          <a
+            href="https://escrutinio2021.tse.gob.sv"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            TSE
+          </a>{' '}
+          hasta este momento ha publicado solo el 40% de la Actas Escrutadas por
+          las mesas del Escrutinio Final, por lo que consideramos que los datos
+          presentados no son suficientes para establecer una tendencia en la
+          votación.
         </p>
       ) : null}
+      <Leyendas />
       {segmento === 'NACIONAL' ? (
         <Nacional {...{ segmento, dataNacional, dnes, dnpsd }} />
       ) : (
