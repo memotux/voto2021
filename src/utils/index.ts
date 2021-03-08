@@ -18,7 +18,7 @@ export const diputadosXdepartamento: { [key: string]: number } = {
   NACIONAL: 84,
 }
 
-type PDD = [
+export type PDD = [
   votosTotal: number,
   cocienteElectoral: number,
   totalDiputadosPorCociente: number,
