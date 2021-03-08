@@ -161,6 +161,15 @@ export const Escrutinio: React.FC<{
         </Field>
       </Row>
       <Leyendas />
+      {tipo === 'Final' ? (
+        <p className="max-w-3xl mx-auto my-4 p-4 border border-blue-900 rounded-md">
+          <span className="font-bold">Nota:</span> Al momento de hacer un
+          análisis de la información presente, tomar en cuenta lo siguiente: Si
+          bien se presentan datos del Escrutinio Final, consideramos que la
+          cantidad de Actas Escrutadas en este momento no son suficientes para
+          reflejar una tendencia en la votación.
+        </p>
+      ) : null}
       {segmento === 'NACIONAL' ? (
         <Nacional {...{ segmento, dataNacional, dnes, dnpsd }} />
       ) : (
