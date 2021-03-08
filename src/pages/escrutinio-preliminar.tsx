@@ -48,11 +48,21 @@ const EscrutinioPreliminar: React.FC<EPreliminarData> = ({ data }) => {
   const dataByPublicacion = dataBySegmento.nodes.filter(
     node => node.publicacion === publicacion
   )
+  
+  const graphLabels = dataByPublicacion.reduce((labels, partido) => {
+    return [...labels, partido.nom_partido]
+  }, [])
+  
+  const graphData = dataByPublicacion.reduce((data, partido) => {
+    const diputados = partido.diputadosXcociente + diputadosXresiduo
+    return [...data, diputados]
+  }, [])
 
   return (
     <Layout>
       <SEO title="Escrutinio Preliminar | " />
       <h1>Escrutinio Preliminar</h1>
+      // Selectors
     </Layout>
   )
 }
