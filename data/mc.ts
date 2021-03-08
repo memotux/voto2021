@@ -29,6 +29,10 @@ export const diputadosSegunMC: Array<{ partido: string; diputados: number }> = [
     diputados: 1,
   },
   {
+    partido: 'NT',
+    diputados: 1,
+  },
+  {
     partido: 'PDC',
     diputados: 1,
   },
@@ -68,6 +72,10 @@ export const diputadosXdepartamenotSegunNES: Array<{
         partido: 'COALICIÓN ARENA',
         diputados: 1,
       },
+      {
+        partido: 'ARENA-DS',
+        diputados: 1,
+      },
     ],
     fieldValue: 'AHUACHAPAN',
   },
@@ -75,6 +83,10 @@ export const diputadosXdepartamenotSegunNES: Array<{
     nodes: [
       {
         partido: 'COALICIÓN N-GANA',
+        diputados: 2,
+      },
+      {
+        partido: 'N-GANA',
         diputados: 2,
       },
       {
@@ -90,12 +102,18 @@ export const diputadosXdepartamenotSegunNES: Array<{
         partido: 'COALICIÓN N-GANA',
         diputados: 1,
       },
-
+      {
+        partido: 'N-GANA',
+        diputados: 1,
+      },
       {
         partido: 'COALICIÓN PCN',
         diputados: 1,
       },
-
+      {
+        partido: 'PCN-DS',
+        diputados: 1,
+      },
       {
         partido: 'N',
         diputados: 1,
@@ -107,6 +125,10 @@ export const diputadosXdepartamenotSegunNES: Array<{
     nodes: [
       {
         partido: 'COALICIÓN N-GANA',
+        diputados: 0,
+      },
+      {
+        partido: 'N-GANA',
         diputados: 0,
       },
       {
@@ -158,6 +180,10 @@ export const diputadosXdepartamenotSegunNES: Array<{
     nodes: [
       {
         partido: 'COALICIÓN N-GANA',
+        diputados: 2,
+      },
+      {
+        partido: 'N-GANA',
         diputados: 2,
       },
       {
@@ -216,6 +242,10 @@ export const diputadosXdepartamenotSegunNES: Array<{
         diputados: 3,
       },
       {
+        partido: 'ARENA-DS',
+        diputados: 3,
+      },
+      {
         partido: 'FMLN',
         diputados: 1,
       },
@@ -225,6 +255,10 @@ export const diputadosXdepartamenotSegunNES: Array<{
       },
       {
         partido: 'NUESTRO TIEMPO',
+        diputados: 1,
+      },
+      {
+        partido: 'NT',
         diputados: 1,
       },
       {
@@ -241,11 +275,19 @@ export const diputadosXdepartamenotSegunNES: Array<{
         diputados: 2,
       },
       {
+        partido: 'N-GANA',
+        diputados: 2,
+      },
+      {
         partido: 'N',
         diputados: 0,
       },
       {
         partido: 'COALICIÓN ARENA-PCN',
+        diputados: 1,
+      },
+      {
+        partido: 'ARENA-PCN',
         diputados: 1,
       },
     ],
