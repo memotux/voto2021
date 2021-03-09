@@ -1,4 +1,5 @@
 import React from 'react'
+import moment from 'moment'
 import { Nacional, Departamento } from '.'
 import {
   diputadosSegunMC,
@@ -43,7 +44,15 @@ export const Escrutinio: React.FC<{
       }
       return acc
     }, [])
-    .sort((a, b) => (b > a ? -1 : 1))
+    .sort((a, b) => {
+      if (tipo === 'Final') {
+        const dateA = moment(a.replace('efinal#', ''), 'DD/MM/YYYY LT').unix()
+        const dateB = moment(b.replace('efinal#', ''), 'DD/MM/YYYY LT').unix()
+
+        return dateA - dateB
+      }
+      return b > a ? -1 : 1
+    })
 
   const segmentos = group
     .map(segmento => segmento.fieldValue)
@@ -158,7 +167,7 @@ export const Escrutinio: React.FC<{
       >
         <div className="text-center mb-2 sm:mb-0">
           <label htmlFor="segmento" className="block lg:inline sm:mr-4">
-            Segmento:
+            Selecciona Departamento:
           </label>
           <Selector
             id="segmento"
@@ -170,7 +179,7 @@ export const Escrutinio: React.FC<{
         </div>
         <div className="text-center">
           <label htmlFor="publicacion" className="block lg:inline sm:mr-4">
-            Publicaciones:
+            Selecciona Publicación:
           </label>
           <Selector
             id="publicacion"
@@ -198,7 +207,7 @@ export const Escrutinio: React.FC<{
           >
             TSE
           </a>{' '}
-          hasta este momento ha publicado solo el 46% de la Actas Escrutadas por
+          hasta este momento ha publicado solo el 55% de la Actas Escrutadas por
           las mesas del Escrutinio Final, por lo que consideramos que los datos
           presentados no son suficientes para establecer una tendencia en la
           votación.
