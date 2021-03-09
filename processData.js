@@ -8,12 +8,12 @@ function efinal() {
   const theData = []
 
   files.forEach(file => {
-    const html = fs.readFileSync(`./data/efinal/${file}`)
-    const theFile = ch.load(html)
+    const text = fs.readFileSync(`./data/efinal/${file}`)
+    const html = ch.load(text)
 
-    const actualizacion = theFile('.fecha-actualizacion span').text()
+    const actualizacion = html('.fecha-actualizacion span').text()
 
-    const theCards = theFile('app-detalle-votos .card').toArray()
+    const theCards = html('app-detalle-votos .card').toArray()
 
     theCards.forEach(card => {
       const thisData = []
@@ -67,13 +67,15 @@ function epreliminar() {
   const files = fs.readdirSync('./data/epreliminar', { encoding: 'utf-8' })
 
   return files.map(file => {
-    const html = fs.readFileSync(`./data/epreliminar/${file}`, {
+    const text = fs.readFileSync(`./data/epreliminar/${file}`, {
       encoding: 'utf-8',
     })
     const publicacion = file.split('-').pop().split('.')[0]
 
-    const script = ch.load(html)('body script:nth-of-type(3)').html()
-    const fecha = ch.load(html)(`option[value="${publicacion}"]`).text()
+    const html = ch.load(text)
+
+    const script = html('body script:nth-of-type(3)').html()
+    const fecha = html(`option[value="${publicacion}"]`).text()
 
     if (!script) return
 

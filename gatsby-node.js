@@ -1,14 +1,7 @@
-const fs = require('fs')
-const ch = require('cheerio')
-const processData = require('./processData')
-
-const { diputadosXdepartamento } = processData
+const { epreliminar, efinal, diputadosXdepartamento } = require('./processData')
 
 exports.sourceNodes = ({ actions, createNodeId, createContentDigest }) => {
   const { createNode } = actions
-
-  const dataPreliminar = processData.epreliminar()
-  const dataFinal = processData.efinal()
 
   const processNode = dataFile => {
     const votosTotal = dataFile.reduce((total, partido) => {
@@ -72,6 +65,6 @@ exports.sourceNodes = ({ actions, createNodeId, createContentDigest }) => {
     })
   }
 
-  dataPreliminar.forEach(processNode)
-  dataFinal.forEach(processNode)
+  epreliminar().forEach(processNode)
+  efinal().forEach(processNode)
 }
