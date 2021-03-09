@@ -10,15 +10,14 @@ const Header = ({ siteTitle }: { siteTitle: string }) => (
         </Link>
       </h1>
     </div>
-    <nav className="grid grid-cols-3 place-items-center place-content-around">
-      <p className="text-white">Escrutinio:</p>
-      <Link to="/" activeClassName="active-link">
+    <nav className="grid sm:grid-cols-3 place-items-center place-content-around">
+      <p className="text-white mb-2 sm:mb-0">Escrutinio:</p>
+      <Link to="/" className="mb-2 sm:mb-0" activeClassName="active-link">
         Final
       </Link>
       <Link to="/preliminar" activeClassName="active-link">
         Preliminar
       </Link>
-      {/* <Link to="#">Inconsistencias</Link> */}
     </nav>
   </header>
 )
