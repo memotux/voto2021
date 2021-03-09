@@ -10,7 +10,8 @@ const Header = ({ siteTitle }: { siteTitle: string }) => (
         </Link>
       </h1>
     </div>
-    <nav className="grid grid-cols-2 place-items-center place-content-around">
+    <nav className="grid grid-cols-3 place-items-center place-content-around">
+      <p className="text-white">Escrutinio:</p>
       <Link to="/" activeClassName="active-link">
         Final
       </Link>
