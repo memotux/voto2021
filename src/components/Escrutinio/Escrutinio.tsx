@@ -10,6 +10,7 @@ import Layout from '../layout'
 import Leyendas from './Leyendas'
 import Selector from '../Selector'
 import SEO from '../seo'
+import Graph from './Graph'
 
 export interface EscrutinioProps {
   segmento: string
@@ -98,25 +99,51 @@ export const Escrutinio: React.FC<{
         }, {})
       : null
 
-  const graphLabels = dataByPublicacion.reduce<string[]>((labels, partido) => {
-    return [...labels, partido.nom_partido]
-  }, [])
-
-  const graphData = dataByPublicacion.reduce<number[]>((data, partido) => {
-    const diputados = partido.diputadosXcociente + partido.diputadosXresiduo
-    return [...data, diputados]
-  }, [])
-
-  const dataSegment = processDepartmentData({
-    nodes: dataByPublicacion,
-    fieldValue: segmento,
-  })
   const dnes =
     segmento === 'NACIONAL'
       ? { nodes: diputadosSegunMC, fieldValue: 'NACIONAL' }
       : diputadosXdepartamenotSegunNES
           .filter(department => department.fieldValue === segmento)
           .pop()
+
+  const graphData = dataByPublicacion.reduce<{ [key: string]: number[] }>(
+    (data, partido) => {
+      if (!dnes) return data
+      if (!data[partido.nom_partido]) {
+        data[partido.nom_partido] = []
+      }
+      data[partido.nom_partido].push(
+        partido.diputadosXcociente + partido.diputadosXresiduo,
+        (dnes.nodes.filter(p => p.partido === partido.nom_partido).pop()
+          ?.diputados as number) || 0
+      )
+      return data
+    },
+    {}
+  )
+
+  const graphDataNac = dataByPublicacion.reduce<{ [key: string]: number[] }>(
+    (data, partido) => {
+      if (!dnpsd || !dnes) return data
+      if (!data[partido.nom_partido]) {
+        data[partido.nom_partido] = []
+      }
+
+      data[partido.nom_partido].push(
+        dnpsd[partido.nom_partido],
+        partido.diputadosXcociente + partido.diputadosXresiduo,
+        (dnes.nodes.filter(p => p.partido === partido.nom_partido).pop()
+          ?.diputados as number) || 0
+      )
+      return data
+    },
+    {}
+  )
+
+  const dataSegment = processDepartmentData({
+    nodes: dataByPublicacion,
+    fieldValue: segmento,
+  })
 
   return (
     <Layout>
@@ -129,8 +156,8 @@ export const Escrutinio: React.FC<{
         className={`sm:grid sm:justify-items-center sm:place-items-center w-full p-4 sm:overflow-x-auto sm:space-x-4`}
         style={{ gridTemplateColumns: `repeat(2, minmax(150px, 1fr))` }}
       >
-        <div className="text-center mb-2">
-          <label htmlFor="segmento" className="block md:inline sm:mr-4">
+        <div className="text-center mb-2 sm:mb-0">
+          <label htmlFor="segmento" className="block lg:inline sm:mr-4">
             Segmento:
           </label>
           <Selector
@@ -142,7 +169,7 @@ export const Escrutinio: React.FC<{
           />
         </div>
         <div className="text-center">
-          <label htmlFor="publicacion" className="block md:inline sm:mr-4">
+          <label htmlFor="publicacion" className="block lg:inline sm:mr-4">
             Publicaciones:
           </label>
           <Selector
@@ -171,7 +198,7 @@ export const Escrutinio: React.FC<{
           >
             TSE
           </a>{' '}
-          hasta este momento ha publicado solo el 40% de la Actas Escrutadas por
+          hasta este momento ha publicado solo el 46% de la Actas Escrutadas por
           las mesas del Escrutinio Final, por lo que consideramos que los datos
           presentados no son suficientes para establecer una tendencia en la
           votación.
@@ -179,9 +206,64 @@ export const Escrutinio: React.FC<{
       ) : null}
       <Leyendas />
       {segmento === 'NACIONAL' ? (
-        <Nacional {...{ segmento, dataNacional, dnes, dnpsd }} />
+        <>
+          <Graph
+            graphData={{
+              labels: Object.keys(graphDataNac),
+              datasets: [
+                {
+                  label: 'D',
+                  data: Object.values(graphDataNac).map(partido => partido[0]),
+                  backgroundColor: 'rgba(30, 58, 138, 0.3)',
+                  borderColor: 'rgba(30, 58, 138, 1)',
+                  borderWith: 1,
+                },
+                {
+                  label: 'DCR',
+                  data: Object.values(graphDataNac).map(partido => partido[1]),
+                  backgroundColor: 'rgba(251, 191, 36, 0.3)',
+                  borderColor: 'rgba(251, 191, 36, 1)',
+                  borderWith: 1,
+                },
+                {
+                  label: 'DNES',
+                  data: Object.values(graphDataNac).map(partido => partido[2]),
+                  backgroundColor: 'rgba(220, 38, 38, 0.3)',
+                  borderColor: 'rgba(220, 38, 38, 1)',
+                  borderWith: 1,
+                },
+              ],
+            }}
+          />
+          <Nacional {...{ segmento, dataNacional, dnes, dnpsd }} />
+        </>
       ) : (
-        <Departamento {...{ segmento, dataByPublicacion, dataSegment, dnes }} />
+        <>
+          <Departamento
+            {...{ segmento, dataByPublicacion, dataSegment, dnes }}
+          />
+          <Graph
+            graphData={{
+              labels: Object.keys(graphData),
+              datasets: [
+                {
+                  label: 'D',
+                  data: Object.values(graphData).map(partido => partido[0]),
+                  backgroundColor: 'rgba(30, 58, 138, 0.3)',
+                  borderColor: 'rgba(30, 58, 138, 1)',
+                  borderWith: 1,
+                },
+                {
+                  label: 'DNES',
+                  data: Object.values(graphData).map(partido => partido[1]),
+                  backgroundColor: 'rgba(220, 38, 38, 0.3)',
+                  borderColor: 'rgba(220, 38, 38, 1)',
+                  borderWith: 1,
+                },
+              ],
+            }}
+          />
+        </>
       )}
     </Layout>
   )

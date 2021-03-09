@@ -6,6 +6,7 @@
   "author": "Romeo Mendez Fuentes <romeo@mendezfuentes.net>",
   "dependencies": {
     "@tailwindcss/forms": "^0.2.1",
+    "chart.js": "^2.9.4",
     "cheerio": "^1.0.0-rc.5",
     "gatsby": "^2.32.8",
     "gatsby-image": "^2.11.0",
@@ -24,6 +25,7 @@
     "tailwindcss": "^2.0.3"
   },
   "devDependencies": {
+    "@types/chart.js": "^2.9.31",
     "@types/node": "^14.14.31",
     "@types/react": "^17.0.2",
     "@types/react-dom": "^17.0.1",
