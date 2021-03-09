@@ -7,10 +7,8 @@ import {
 } from '../../../data/mc'
 import { dataByDepartment, dataNode } from '../../pages'
 import { PDD, processDepartmentData } from '../../utils'
-import Layout from '../layout'
 import Leyendas from './Leyendas'
 import Selector from '../Selector'
-import SEO from '../seo'
 import Graph from './Graph'
 
 export interface EscrutinioProps {
@@ -36,47 +34,55 @@ export const Escrutinio: React.FC<{
   group: dataByDepartment[]
   tipo: 'Final' | 'Preliminar'
 }> = ({ group, tipo }) => {
-  const publicaciones = group[0].nodes
-    .reduce<string[]>((acc, partido) => {
-      if (partido.publicacion) {
-        if (acc.includes(partido.publicacion)) return [...acc]
-        return [...acc, partido.publicacion]
-      }
-      return acc
-    }, [])
-    .sort((a, b) => {
-      if (tipo === 'Final') {
-        const dateA = moment(a.replace('efinal#', ''), 'DD/MM/YYYY LT').unix()
-        const dateB = moment(b.replace('efinal#', ''), 'DD/MM/YYYY LT').unix()
+  const publicaciones = React.useMemo(() => {
+    return group[0].nodes
+      .reduce<string[]>((acc, partido) => {
+        if (partido.publicacion) {
+          if (acc.includes(partido.publicacion)) return [...acc]
+          return [...acc, partido.publicacion]
+        }
+        return acc
+      }, [])
+      .sort((a, b) => {
+        if (tipo === 'Final') {
+          const dateA = moment(a.replace('efinal#', ''), 'DD/MM/YYYY LT').unix()
+          const dateB = moment(b.replace('efinal#', ''), 'DD/MM/YYYY LT').unix()
 
-        return dateA - dateB
-      }
-      return b > a ? -1 : 1
-    })
+          return dateA - dateB
+        }
+        return b > a ? -1 : 1
+      })
+  }, [group, tipo])
 
-  const segmentos = group
-    .map(segmento => segmento.fieldValue)
-    .sort((a, b) => (b > a ? -1 : 1))
+  const segmentos = React.useMemo(() => {
+    return group
+      .map(segmento => segmento.fieldValue)
+      .sort((a, b) => (b > a ? -1 : 1))
+  }, [group])
 
   const [segmento, setSegmento] = React.useState('NACIONAL')
   const [publicacion, setPublicacion] = React.useState(
     publicaciones[publicaciones.length - 1] as string
   )
 
-  const [dataBySegmento] = group.filter(group => group.fieldValue === segmento)
-  const dataByPublicacion = dataBySegmento.nodes.filter(
-    node => node.publicacion === publicacion
-  )
+  const [dataBySegmento] = React.useMemo(() => {
+    return group.filter(group => group.fieldValue === segmento)
+  }, [group, segmento])
+  const dataByPublicacion = React.useMemo(() => {
+    return dataBySegmento.nodes.filter(node => node.publicacion === publicacion)
+  }, [dataBySegmento, publicacion])
 
-  const dataNacional = group.reduce<dataByDepartment[]>((data, group) => {
-    return [
-      ...data,
-      {
-        ...group,
-        nodes: group.nodes.filter(node => node.publicacion === publicacion),
-      },
-    ]
-  }, [])
+  const dataNacional = React.useMemo(() => {
+    return group.reduce<dataByDepartment[]>((data, group) => {
+      return [
+        ...data,
+        {
+          ...group,
+          nodes: group.nodes.filter(node => node.publicacion === publicacion),
+        },
+      ]
+    }, [])
+  }, [group, publicacion])
 
   /**
    * Diputados a nivel Nacional por Partido
@@ -84,29 +90,26 @@ export const Escrutinio: React.FC<{
    *
    * {[nom_partido]: number}
    */
-  const dnpsd =
-    segmento === 'NACIONAL'
-      ? group.reduce<{
-          [key: string]: number
-        }>((acc, department) => {
-          department.nodes.forEach(partido => {
-            if (
-              partido.publicacion === publicacion &&
-              partido.segmento !== 'NACIONAL'
-            ) {
-              let key = partido.nom_partido
-              if (!acc[key]) {
-                acc[key] = 0
-              }
-              acc[key] =
-                acc[key] +
-                partido.diputadosXcociente +
-                partido.diputadosXresiduo
-            }
-          })
-          return acc
-        }, {})
-      : null
+  const dnpsd = React.useMemo(() => {
+    return group.reduce<{
+      [key: string]: number
+    }>((acc, department) => {
+      department.nodes.forEach(partido => {
+        if (
+          partido.publicacion === publicacion &&
+          partido.segmento !== 'NACIONAL'
+        ) {
+          let key = partido.nom_partido
+          if (!acc[key]) {
+            acc[key] = 0
+          }
+          acc[key] =
+            acc[key] + partido.diputadosXcociente + partido.diputadosXresiduo
+        }
+      })
+      return acc
+    }, {})
+  }, [group, publicacion])
 
   const dnes =
     segmento === 'NACIONAL'
@@ -115,88 +118,98 @@ export const Escrutinio: React.FC<{
           .filter(department => department.fieldValue === segmento)
           .pop()
 
-  const graphData = dataByPublicacion.reduce<{ [key: string]: number[] }>(
-    (data, partido) => {
-      if (!dnes) return data
-      if (!data[partido.nom_partido]) {
-        data[partido.nom_partido] = []
-      }
-      data[partido.nom_partido].push(
-        partido.diputadosXcociente + partido.diputadosXresiduo,
-        (dnes.nodes.filter(p => p.partido === partido.nom_partido).pop()
-          ?.diputados as number) || 0
-      )
-      return data
-    },
-    {}
-  )
+  const graphData = React.useMemo(() => {
+    return dataByPublicacion.reduce<{ [key: string]: number[] }>(
+      (data, partido) => {
+        if (!dnes) return data
+        if (!data[partido.nom_partido]) {
+          data[partido.nom_partido] = []
+        }
+        data[partido.nom_partido].push(
+          partido.diputadosXcociente + partido.diputadosXresiduo,
+          (dnes.nodes.filter(p => p.partido === partido.nom_partido).pop()
+            ?.diputados as number) || 0
+        )
+        return data
+      },
+      {}
+    )
+  }, [dataByPublicacion])
 
-  const graphDataNac = dataByPublicacion.reduce<{ [key: string]: number[] }>(
-    (data, partido) => {
-      if (!dnpsd || !dnes) return data
-      if (!data[partido.nom_partido]) {
-        data[partido.nom_partido] = []
-      }
+  const graphDataNac = React.useMemo(() => {
+    return dataByPublicacion.reduce<{ [key: string]: number[] }>(
+      (data, partido) => {
+        if (!dnpsd || !dnes) return data
+        if (!data[partido.nom_partido]) {
+          data[partido.nom_partido] = []
+        }
 
-      data[partido.nom_partido].push(
-        dnpsd[partido.nom_partido],
-        partido.diputadosXcociente + partido.diputadosXresiduo,
-        (dnes.nodes.filter(p => p.partido === partido.nom_partido).pop()
-          ?.diputados as number) || 0
-      )
-      return data
-    },
-    {}
-  )
+        data[partido.nom_partido].push(
+          dnpsd[partido.nom_partido],
+          partido.diputadosXcociente + partido.diputadosXresiduo,
+          (dnes.nodes.filter(p => p.partido === partido.nom_partido).pop()
+            ?.diputados as number) || 0
+        )
+        return data
+      },
+      {}
+    )
+  }, [dataByPublicacion])
 
-  const dataSegment = processDepartmentData({
-    nodes: dataByPublicacion,
-    fieldValue: segmento,
-  })
+  const dataSegment = React.useMemo(() => {
+    return processDepartmentData({
+      nodes: dataByPublicacion,
+      fieldValue: segmento,
+    })
+  }, [dataByPublicacion, segmento])
 
   return (
-    <Layout>
-      <SEO title={`Escrutinio ${tipo} `} />
+    <>
       <h1 className="text-center">Escrutinio {tipo}</h1>
       <h2 className="text-center">
         Total Votos Válidos: {dataSegment[0].toLocaleString()}
       </h2>
-      <div
-        className={`sm:grid sm:justify-items-center sm:place-items-center w-full p-4 sm:overflow-x-auto sm:space-x-4`}
-        style={{ gridTemplateColumns: `repeat(2, minmax(150px, 1fr))` }}
-      >
-        <div className="text-center mb-2 sm:mb-0">
-          <label htmlFor="segmento" className="block lg:inline sm:mr-4">
-            Selecciona Departamento:
-          </label>
-          <Selector
-            id="segmento"
-            className="rounded-md bg-blue-200"
-            onChange={e => setSegmento(e.currentTarget.value)}
-            options={segmentos}
-            defaultValue={segmento}
-          />
-        </div>
-        <div className="text-center">
-          <label htmlFor="publicacion" className="block lg:inline sm:mr-4">
-            Selecciona Publicación:
-          </label>
-          <Selector
-            id="publicacion"
-            className="rounded-md bg-blue-200"
-            onChange={e => setPublicacion(e.currentTarget.value)}
-            defaultValue={publicacion}
-            options={publicaciones.map(publicacion => {
-              const textToReplace =
-                tipo === 'Preliminar' ? 'epreliminar' : 'efinal#'
-              return {
-                value: publicacion,
-                text: publicacion.replace(textToReplace, ''),
-              }
-            })}
-          />
-        </div>
-      </div>
+      {React.useMemo(
+        () => (
+          <div
+            className={`sm:grid sm:justify-items-center sm:place-items-center w-full p-4 sm:overflow-x-auto sm:space-x-4`}
+            style={{ gridTemplateColumns: `repeat(2, minmax(150px, 1fr))` }}
+          >
+            <div className="text-center mb-2 sm:mb-0">
+              <label htmlFor="segmento" className="block lg:inline sm:mr-4">
+                Selecciona Departamento:
+              </label>
+              <Selector
+                id="segmento"
+                className="rounded-md bg-blue-200"
+                onChange={e => setSegmento(e.currentTarget.value)}
+                options={segmentos}
+                defaultValue="NACIONAL"
+              />
+            </div>
+            <div className="text-center">
+              <label htmlFor="publicacion" className="block lg:inline sm:mr-4">
+                Selecciona Publicación:
+              </label>
+              <Selector
+                id="publicacion"
+                className="rounded-md bg-blue-200"
+                onChange={e => setPublicacion(e.currentTarget.value)}
+                defaultValue={publicaciones[publicaciones.length - 1] as string}
+                options={publicaciones.map(publicacion => {
+                  const textToReplace =
+                    tipo === 'Preliminar' ? 'epreliminar' : 'efinal#'
+                  return {
+                    value: publicacion,
+                    text: publicacion.replace(textToReplace, ''),
+                  }
+                })}
+              />
+            </div>
+          </div>
+        ),
+        [group, segmentos, publicaciones]
+      )}
       {tipo === 'Final' ? (
         <p className="max-w-3xl mx-auto my-4 p-4 border border-blue-900 rounded-md">
           <span className="font-bold">Nota:</span> El{' '}
@@ -213,7 +226,12 @@ export const Escrutinio: React.FC<{
           votación.
         </p>
       ) : null}
-      <Leyendas />
+      {React.useMemo(
+        () => (
+          <Leyendas />
+        ),
+        [group]
+      )}
       {segmento === 'NACIONAL' ? (
         <>
           <Graph
@@ -274,6 +292,6 @@ export const Escrutinio: React.FC<{
           />
         </>
       )}
-    </Layout>
+    </>
   )
 }

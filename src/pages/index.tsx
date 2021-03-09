@@ -1,6 +1,8 @@
 import { graphql } from 'gatsby'
 import React from 'react'
 import Escrutinio from '../components/Escrutinio'
+import Layout from '../components/layout'
+import SEO from '../components/seo'
 
 export interface dataNode {
   segmento: string
@@ -29,7 +31,14 @@ const EscrutinioFinal: React.FC<EscrutinioData> = ({ data }) => {
   const {
     allVoto2021: { group },
   } = data
-  return <Escrutinio group={group} tipo="Final" />
+  return (
+    <>
+      <Layout>
+        <SEO title={`Escrutinio Final `} />
+        <Escrutinio group={group} tipo="Final" />
+      </Layout>
+    </>
+  )
 }
 
 export default EscrutinioFinal
