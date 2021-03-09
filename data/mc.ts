@@ -290,6 +290,10 @@ export const diputadosXdepartamenotSegunNES: Array<{
         partido: 'ARENA-PCN',
         diputados: 1,
       },
+      {
+        partido: 'TOTAL ARENA-PCN',
+        diputados: 1,
+      },
     ],
     fieldValue: 'SAN VICENTE',
   },
