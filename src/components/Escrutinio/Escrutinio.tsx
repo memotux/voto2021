@@ -220,7 +220,7 @@ export const Escrutinio: React.FC<{
           >
             TSE
           </a>{' '}
-          hasta este momento ha publicado solo el 62% de la Actas Escrutadas por
+          hasta este momento ha publicado solo el 64% de la Actas Escrutadas por
           las mesas del Escrutinio Final, por lo que consideramos que los datos
           presentados no son suficientes para establecer una tendencia en la
           votación.
