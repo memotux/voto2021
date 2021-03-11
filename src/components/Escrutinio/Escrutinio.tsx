@@ -38,7 +38,7 @@ export const Escrutinio: React.FC<{
     return group[0].nodes
       .reduce<string[]>((acc, partido) => {
         if (partido.publicacion) {
-          if (acc.includes(partido.publicacion)) return [...acc]
+          if (acc.includes(partido.publicacion)) return acc
           return [...acc, partido.publicacion]
         }
         return acc
@@ -221,12 +221,13 @@ export const Escrutinio: React.FC<{
       {
         <div className="md:w-3/5 p-2 mx-auto border border-blue-900 rounded-md my-2">
           <p>
-            <span className="font-bold">Aclaración: </span>
-            En los departamentos con coalición (Cabañas, Chalatenango,
-            Cuscatlán, La Unión, San Salvador, San Vicente) los votos validos
-            hechos a la Coalición o a los partidos de la Coalición, se suman en
-            "Total ´Nombre Coalición´" o "Coalición ´Nombre Coalición´". Es a
-            este Total al que se le asignan diputados.{' '}
+            <span className="font-bold">Nota: </span>
+            Hasta este momento, con el 86% de actas escrutadas publicadas, en
+            los departamentos con coalición (Cabañas, Chalatenango, Cuscatlán,
+            La Unión, San Salvador, San Vicente) los votos validos hechos a la
+            Coalición o a los partidos de la Coalición, se suman en "Total
+            ´Nombre Coalición´" o "Coalición ´Nombre Coalición´". Es a este
+            Total al que se le asignan diputados.{' '}
           </p>
         </div>
       }

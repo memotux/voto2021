@@ -38,7 +38,8 @@ export function processDepartmentData({
         'CUSCATLAN',
         'LA UNION',
       ].includes(partido.segmento) &&
-      ['N', 'GANA', 'N-GANA', 'ARENA-PCN'].includes(partido.nom_partido)
+      ['N', 'GANA', 'N-GANA', 'ARENA-PCN'].includes(partido.nom_partido) &&
+      partido.publicacion?.includes('efinal')
     ) {
       return total
     }
