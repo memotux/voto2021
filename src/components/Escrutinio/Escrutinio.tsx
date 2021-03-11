@@ -65,11 +65,13 @@ export const Escrutinio: React.FC<{
     publicaciones[publicaciones.length - 1] as string
   )
 
-  const [dataBySegmento] = React.useMemo(() => {
-    return group.filter(group => group.fieldValue === segmento)
+  const dataBySegmento = React.useMemo(() => {
+    return group.find(group => group.fieldValue === segmento)
   }, [group, segmento])
   const dataByPublicacion = React.useMemo(() => {
-    return dataBySegmento.nodes.filter(node => node.publicacion === publicacion)
+    return dataBySegmento?.nodes.filter(
+      node => node.publicacion === publicacion
+    )
   }, [dataBySegmento, publicacion])
 
   const dataNacional = React.useMemo(() => {
@@ -114,51 +116,57 @@ export const Escrutinio: React.FC<{
   const dnes =
     segmento === 'NACIONAL'
       ? { nodes: diputadosSegunMC, fieldValue: 'NACIONAL' }
-      : diputadosXdepartamenotSegunNES
-          .filter(department => department.fieldValue === segmento)
-          .pop()
+      : diputadosXdepartamenotSegunNES.find(
+          department => department.fieldValue === segmento
+        )
 
   const graphData = React.useMemo(() => {
-    return dataByPublicacion.reduce<{ [key: string]: number[] }>(
-      (data, partido) => {
-        if (!dnes) return data
-        if (!data[partido.nom_partido]) {
-          data[partido.nom_partido] = []
-        }
-        data[partido.nom_partido].push(
-          partido.diputadosXcociente + partido.diputadosXresiduo,
-          (dnes.nodes.filter(p => p.partido === partido.nom_partido).pop()
-            ?.diputados as number) || 0
-        )
-        return data
-      },
-      {}
+    return (
+      dataByPublicacion?.reduce<{ [key: string]: number[] }>(
+        (data, partido) => {
+          if (!dnes) return data
+          if (!data[partido.nom_partido]) {
+            data[partido.nom_partido] = []
+          }
+          data[partido.nom_partido].push(
+            partido.diputadosXcociente + partido.diputadosXresiduo,
+            (dnes.nodes.find(p => p.partido === partido.nom_partido)
+              ?.diputados as number) || 0
+          )
+          return data
+        },
+        {}
+      ) || {}
     )
   }, [dataByPublicacion])
 
   const graphDataNac = React.useMemo(() => {
-    return dataByPublicacion.reduce<{ [key: string]: number[] }>(
-      (data, partido) => {
-        if (!dnpsd || !dnes) return data
-        if (!data[partido.nom_partido]) {
-          data[partido.nom_partido] = []
-        }
+    return (
+      dataByPublicacion?.reduce<{ [key: string]: number[] }>(
+        (data, partido) => {
+          if (!dnpsd || !dnes) return data
+          if (!data[partido.nom_partido]) {
+            data[partido.nom_partido] = []
+          }
 
-        data[partido.nom_partido].push(
-          dnpsd[partido.nom_partido],
-          partido.diputadosXcociente + partido.diputadosXresiduo,
-          (dnes.nodes.filter(p => p.partido === partido.nom_partido).pop()
-            ?.diputados as number) || 0
-        )
-        return data
-      },
-      {}
+          data[partido.nom_partido].push(
+            ['N-GANA', 'ARENA-PCN'].includes(partido.nom_partido)
+              ? dnpsd[`TOTAL ${partido.nom_partido}`]
+              : dnpsd[partido.nom_partido],
+            partido.diputadosXcociente + partido.diputadosXresiduo,
+            (dnes.nodes.find(p => p.partido === partido.nom_partido)
+              ?.diputados as number) || 0
+          )
+          return data
+        },
+        {}
+      ) || {}
     )
   }, [dataByPublicacion])
 
   const dataSegment = React.useMemo(() => {
     return processDepartmentData({
-      nodes: dataByPublicacion,
+      nodes: dataByPublicacion as dataNode[],
       fieldValue: segmento,
     })
   }, [dataByPublicacion, segmento])
@@ -210,6 +218,18 @@ export const Escrutinio: React.FC<{
         ),
         [group, segmentos, publicaciones]
       )}
+      {
+        <div className="md:w-3/5 p-2 mx-auto border border-blue-900 rounded-md my-2">
+          <p>
+            <span className="font-bold">Aclaración: </span>
+            En los departamentos con coalición (Cabañas, Chalatenango,
+            Cuscatlán, La Unión, San Salvador, San Vicente) los votos validos
+            hechos a la Coalición o a los partidos de la Coalición, se suman en
+            "Total ´Nombre Coalición´" o "Coalición ´Nombre Coalición´". Es a
+            este Total al que se le asignan diputados.{' '}
+          </p>
+        </div>
+      }
       {React.useMemo(
         () => (
           <Leyendas />

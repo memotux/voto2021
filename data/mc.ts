@@ -86,7 +86,7 @@ export const diputadosXdepartamenotSegunNES: Array<{
         diputados: 2,
       },
       {
-        partido: 'N-GANA',
+        partido: 'TOTAL N-GANA',
         diputados: 2,
       },
       {
@@ -103,7 +103,7 @@ export const diputadosXdepartamenotSegunNES: Array<{
         diputados: 1,
       },
       {
-        partido: 'N-GANA',
+        partido: 'TOTAL N-GANA',
         diputados: 1,
       },
       {
@@ -125,15 +125,15 @@ export const diputadosXdepartamenotSegunNES: Array<{
     nodes: [
       {
         partido: 'COALICIÓN N-GANA',
-        diputados: 0,
+        diputados: 2,
       },
       {
-        partido: 'N-GANA',
-        diputados: 0,
+        partido: 'TOTAL N-GANA',
+        diputados: 2,
       },
       {
         partido: 'N',
-        diputados: 2,
+        diputados: 0,
       },
       {
         partido: 'ARENA',
@@ -183,7 +183,7 @@ export const diputadosXdepartamenotSegunNES: Array<{
         diputados: 2,
       },
       {
-        partido: 'N-GANA',
+        partido: 'TOTAL N-GANA',
         diputados: 2,
       },
       {
@@ -275,7 +275,7 @@ export const diputadosXdepartamenotSegunNES: Array<{
         diputados: 2,
       },
       {
-        partido: 'N-GANA',
+        partido: 'TOTAL N-GANA',
         diputados: 2,
       },
       {
@@ -288,7 +288,7 @@ export const diputadosXdepartamenotSegunNES: Array<{
       },
       {
         partido: 'ARENA-PCN',
-        diputados: 1,
+        diputados: 0,
       },
       {
         partido: 'TOTAL ARENA-PCN',

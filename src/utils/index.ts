@@ -30,6 +30,18 @@ export function processDepartmentData({
   fieldValue,
 }: dataByDepartment): PDD {
   const votosTotal = nodes.reduce((total, partido) => {
+    if (
+      [
+        'SAN VICENTE',
+        'CABAÑAS',
+        'CHALATENANGO',
+        'CUSCATLAN',
+        'LA UNION',
+      ].includes(partido.segmento) &&
+      ['N', 'GANA', 'N-GANA', 'ARENA-PCN'].includes(partido.nom_partido)
+    ) {
+      return total
+    }
     return total + partido.votos_partido
   }, 0)
 

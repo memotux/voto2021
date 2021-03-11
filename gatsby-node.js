@@ -9,6 +9,21 @@ exports.sourceNodes = ({ actions, createNodeId, createContentDigest }) => {
     }, 0)
 
     const data01 = dataFile.map(partido => {
+      if (
+        [
+          'SAN VICENTE',
+          'CABAÑAS',
+          'CHALATENANGO',
+          'CUSCATLAN',
+          'LA UNION',
+        ].includes(partido.segmento) &&
+        ['N', 'GANA', 'N-GANA', 'ARENA-PCN'].includes(partido.nom_partido)
+      ) {
+        return Object.assign({}, partido, {
+          diputadosXcociente: 0,
+          residuo: 0,
+        })
+      }
       const cocienteElectoral =
         votosTotal / diputadosXdepartamento[partido.segmento]
       const diputadosXcociente = Math.floor(
@@ -20,10 +35,21 @@ exports.sourceNodes = ({ actions, createNodeId, createContentDigest }) => {
       return Object.assign({ diputadosXcociente, residuo }, partido)
     })
 
-    const totalDiputadosCociente = data01.reduce(
-      (total, partido) => total + partido.diputadosXcociente,
-      0
-    )
+    const totalDiputadosCociente = data01.reduce((total, partido) => {
+      if (
+        [
+          'SAN VICENTE',
+          'CABAÑAS',
+          'CHALATENANGO',
+          'CUSCATLAN',
+          'LA UNION',
+        ].includes(partido.segmento) &&
+        ['N', 'GANA', 'N-GANA', 'ARENA-PCN'].includes(partido.nom_partido)
+      ) {
+        return total
+      }
+      return total + partido.diputadosXcociente
+    }, 0)
     const diputadosFaltaAsignar =
       diputadosXdepartamento[dataFile[0].segmento] - totalDiputadosCociente
 

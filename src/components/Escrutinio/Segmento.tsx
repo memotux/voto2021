@@ -24,10 +24,8 @@ export const Segmento: React.FC<EscrutinioProps> = ({
         </dl>
       </Field>
       {dataByPublicacion.map(partido => {
-        const dpnes = dnes?.nodes.filter(p => p.partido === partido.nom_partido)
-          .length
-          ? dnes.nodes.filter(p => p.partido === partido.nom_partido)
-          : null
+        const dpnes =
+          dnes?.nodes.find(p => p.partido === partido.nom_partido) || null
 
         return (
           <Field key={`nom-partido-${partido.nom_partido}`}>
@@ -38,13 +36,13 @@ export const Segmento: React.FC<EscrutinioProps> = ({
               {
                 <>
                   <dt>DNES:</dt>
-                  <dd>{dpnes ? dpnes[0].diputados : 0}</dd>
+                  <dd>{dpnes ? dpnes.diputados : 0}</dd>
                 </>
               }
               {/* <dt>R:</dt>
-                      <dd>{partido.residuo.toLocaleString()}</dd>
-                      <dt>VV:</dt>
-                      <dd>{partido.votos_partido.toLocaleString()}</dd> */}
+              <dd>{partido.residuo.toLocaleString()}</dd>
+              <dt>VV:</dt>
+              <dd>{partido.votos_partido.toLocaleString()}</dd> */}
             </dl>
           </Field>
         )

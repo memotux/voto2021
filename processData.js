@@ -45,8 +45,8 @@ function efinal() {
               'SOBRANTES',
               'VOTO CRUZADO',
               'FALTANTES',
-              'TOTAL N-GANA',
-              'TOTAL ARENA-PCN',
+              // 'TOTAL N-GANA',
+              // 'TOTAL ARENA-PCN',
             ].includes(nom_partido)
           ) {
             thisData.push({
