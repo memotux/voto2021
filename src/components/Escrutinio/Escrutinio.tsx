@@ -210,22 +210,6 @@ export const Escrutinio: React.FC<{
         ),
         [group, segmentos, publicaciones]
       )}
-      {tipo === 'Final' ? (
-        <p className="max-w-3xl mx-auto my-4 p-4 border border-blue-900 rounded-md">
-          <span className="font-bold">Nota:</span> El{' '}
-          <a
-            href="https://escrutinio2021.tse.gob.sv"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            TSE
-          </a>{' '}
-          hasta este momento ha publicado solo el 64% de la Actas Escrutadas por
-          las mesas del Escrutinio Final, por lo que consideramos que los datos
-          presentados no son suficientes para establecer una tendencia en la
-          votación.
-        </p>
-      ) : null}
       {React.useMemo(
         () => (
           <Leyendas />

@@ -34,7 +34,7 @@ function efinal() {
             ch
               .load(tr.children)('td.resultados-cantidad')
               .text()
-              .replace(',', '')
+              .replace(/,/g, '')
           )
           if (
             ![
@@ -46,6 +46,7 @@ function efinal() {
               'VOTO CRUZADO',
               'FALTANTES',
               'TOTAL N-GANA',
+              'TOTAL ARENA-PCN',
             ].includes(nom_partido)
           ) {
             thisData.push({
