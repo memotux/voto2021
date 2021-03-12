@@ -222,7 +222,7 @@ export const Escrutinio: React.FC<{
         <div className="md:w-3/5 p-2 mx-auto border border-blue-900 rounded-md my-2">
           <p>
             <span className="font-bold">Nota: </span>
-            Hasta este momento, con el 86% de actas escrutadas publicadas, en
+            Hasta este momento, con el 89% de actas escrutadas publicadas, en
             los departamentos con coalición (Cabañas, Chalatenango, Cuscatlán,
             La Unión, San Salvador, San Vicente) los votos validos hechos a la
             Coalición o a los partidos de la Coalición, se suman en "Total
