@@ -135,8 +135,12 @@ export const Escrutinio: React.FC<{
             data[partido.nom_partido] = []
           }
           data[partido.nom_partido].push(
-            partido.diputadosXcociente + partido.diputadosXresiduo[0],
-            partido.diputadosXcociente + partido.diputadosXresiduo[1],
+            ['TOTAL N-GANA', 'TOTAL ARENA-PCN'].includes(partido.nom_partido)
+              ? 0
+              : partido.diputadosXcociente + partido.diputadosXresiduo[0],
+            ['N-GANA', 'ARENA-PCN'].includes(partido.nom_partido)
+              ? 0
+              : partido.diputadosXcociente + partido.diputadosXresiduo[1],
             (dnes.nodes.find(p => p.partido === partido.nom_partido)
               ?.diputados as number) || 0
           )

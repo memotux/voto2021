@@ -31,7 +31,7 @@ export const Segmento: React.FC<EscrutinioProps> = ({
           <Field key={`nom-partido-${partido.nom_partido}`}>
             <p>{partido.nom_partido}</p>
             <dl className="grid grid-cols-2">
-              <dt>D:</dt>
+              <dt>DEP:</dt>
               <dd>
                 {['TOTAL N-GANA', 'TOTAL ARENA-PCN'].includes(
                   partido.nom_partido
@@ -39,7 +39,7 @@ export const Segmento: React.FC<EscrutinioProps> = ({
                   ? 0
                   : partido.diputadosXcociente + partido.diputadosXresiduo[0]}
               </dd>
-              <dt>D1:</dt>
+              <dt>DEF:</dt>
               <dd>
                 {['N-GANA', 'ARENA-PCN'].includes(partido.nom_partido)
                   ? 0

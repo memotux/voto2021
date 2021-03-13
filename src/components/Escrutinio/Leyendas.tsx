@@ -7,11 +7,13 @@ const Leyendas = () => {
     <Row cols={7}>
       <Field>
         <p className="text-xs">
-          D = Diputados Electos según Escrutinio Preliminar
+          DEP = Diputados Electos según Escrutinio Preliminar
         </p>
       </Field>
       <Field>
-        <p className="text-xs">D1 = Diputados Electos según Escrutinio Final</p>
+        <p className="text-xs">
+          DEF = Diputados Electos según Escrutinio Final
+        </p>
       </Field>
       <Field>
         <p className="text-xs">
