@@ -4,12 +4,19 @@ import Row from '../Row'
 
 const Leyendas = () => {
   return (
-    <Row cols={6}>
+    <Row cols={7}>
       <Field>
-        <p className="text-xs">D = Diputados Electos</p>
+        <p className="text-xs">
+          D = Diputados Electos según Escrutinio Preliminar
+        </p>
       </Field>
       <Field>
-        <p className="text-xs">DCR = Diputados por Cociente y Residuos</p>
+        <p className="text-xs">D1 = Diputados Electos según Escrutinio Final</p>
+      </Field>
+      <Field>
+        <p className="text-xs">
+          DCR = Diputados por Cociente y Residuos Nacional
+        </p>
       </Field>
       <Field>
         <p className="text-xs">DNES = Diputados segun Noticiero El Salvador</p>

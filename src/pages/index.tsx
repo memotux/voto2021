@@ -8,9 +8,9 @@ export interface dataNode {
   segmento: string
   publicacion?: string
   diputadosXcociente: number
-  diputadosXresiduo: number
+  diputadosXresiduo: [number, number]
   nom_partido: string
-  residuo: number
+  residuo: [number, number]
   votos_partido: number
 }
 

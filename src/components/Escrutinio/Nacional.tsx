@@ -51,13 +51,25 @@ export const Nacional: React.FC<EscrutinioProps> = ({
                 <dt>D:</dt>
                 <dd>
                   {['N-GANA', 'ARENA-PCN'].includes(partido.nom_partido)
-                    ? dnpsd[`TOTAL ${partido.nom_partido}`]
-                    : dnpsd[partido.nom_partido]}
+                    ? dnpsd[`TOTAL ${partido.nom_partido}`][0]
+                    : dnpsd[partido.nom_partido][0]}
+                </dd>
+                <dt>D1:</dt>
+                <dd>
+                  {['N-GANA', 'ARENA-PCN'].includes(partido.nom_partido)
+                    ? dnpsd[`TOTAL ${partido.nom_partido}`][1]
+                    : dnpsd[partido.nom_partido][1]}
                 </dd>
                 <dt>DCR:</dt>
                 <dd>
-                  {partido.diputadosXcociente + partido.diputadosXresiduo}
+                  {['N-GANA', 'ARENA-PCN'].includes(partido.nom_partido)
+                    ? partido.diputadosXcociente + partido.diputadosXresiduo[0]
+                    : partido.diputadosXcociente + partido.diputadosXresiduo[1]}
                 </dd>
+                {/* <dt>DCR1:</dt>
+                <dd>
+                  {partido.diputadosXcociente + partido.diputadosXresiduo[1]}
+                </dd> */}
                 <dt>DNES:</dt>
                 <dd>{dpnes ? dpnes.diputados : 0}</dd>
                 {/* <dt>R:</dt>
@@ -78,7 +90,7 @@ export const Nacional: React.FC<EscrutinioProps> = ({
           const dataSegment = processDepartmentData(departamento)
           return (
             <Segmento
-              key={`dataNacinoal-${departamento.fieldValue}`}
+              key={`dataNacional-${departamento.fieldValue}`}
               {...{
                 dataByPublicacion: departamento.nodes,
                 segmento: departamento.fieldValue,

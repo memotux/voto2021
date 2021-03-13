@@ -17,7 +17,7 @@ export interface EscrutinioProps {
   dataNacional?: { nodes: dataNode[]; fieldValue: string }[]
   dataSegment?: PDD
   dnpsd?: {
-    [key: string]: number
+    [key: string]: [number, number]
   } | null
   dnes:
     | {
@@ -94,7 +94,7 @@ export const Escrutinio: React.FC<{
    */
   const dnpsd = React.useMemo(() => {
     return group.reduce<{
-      [key: string]: number
+      [key: string]: [number, number]
     }>((acc, department) => {
       department.nodes.forEach(partido => {
         if (
@@ -103,10 +103,16 @@ export const Escrutinio: React.FC<{
         ) {
           let key = partido.nom_partido
           if (!acc[key]) {
-            acc[key] = 0
+            acc[key] = [0, 0]
           }
-          acc[key] =
-            acc[key] + partido.diputadosXcociente + partido.diputadosXresiduo
+          acc[key] = [
+            acc[key][0] +
+              partido.diputadosXcociente +
+              partido.diputadosXresiduo[0],
+            acc[key][1] +
+              partido.diputadosXcociente +
+              partido.diputadosXresiduo[1],
+          ]
         }
       })
       return acc
@@ -129,7 +135,8 @@ export const Escrutinio: React.FC<{
             data[partido.nom_partido] = []
           }
           data[partido.nom_partido].push(
-            partido.diputadosXcociente + partido.diputadosXresiduo,
+            partido.diputadosXcociente + partido.diputadosXresiduo[0],
+            partido.diputadosXcociente + partido.diputadosXresiduo[1],
             (dnes.nodes.find(p => p.partido === partido.nom_partido)
               ?.diputados as number) || 0
           )
@@ -150,10 +157,13 @@ export const Escrutinio: React.FC<{
           }
 
           data[partido.nom_partido].push(
+            dnpsd[partido.nom_partido][0],
             ['N-GANA', 'ARENA-PCN'].includes(partido.nom_partido)
-              ? dnpsd[`TOTAL ${partido.nom_partido}`]
-              : dnpsd[partido.nom_partido],
-            partido.diputadosXcociente + partido.diputadosXresiduo,
+              ? dnpsd[`TOTAL ${partido.nom_partido}`][1]
+              : dnpsd[partido.nom_partido][1],
+            ['N-GANA', 'ARENA-PCN'].includes(partido.nom_partido)
+              ? partido.diputadosXcociente + partido.diputadosXresiduo[0]
+              : partido.diputadosXcociente + partido.diputadosXresiduo[1],
             (dnes.nodes.find(p => p.partido === partido.nom_partido)
               ?.diputados as number) || 0
           )
@@ -222,12 +232,9 @@ export const Escrutinio: React.FC<{
         <div className="md:w-3/5 p-2 mx-auto border border-blue-900 rounded-md my-2">
           <p>
             <span className="font-bold">Nota: </span>
-            Hasta este momento, con el 89% de actas escrutadas publicadas, en
-            los departamentos con coalición (Cabañas, Chalatenango, Cuscatlán,
-            La Unión, San Salvador, San Vicente) los votos validos hechos a la
-            Coalición o a los partidos de la Coalición, se suman en "Total
-            ´Nombre Coalición´" o "Coalición ´Nombre Coalición´". Es a este
-            Total al que se le asignan diputados.{' '}
+            Votación al 100% del Escrutinio Final y al 96% del Escrutinio
+            Preliminar. Los datos oficiales serán proporcionados por el TSE al
+            publicar el decreto correspondiente en el Diario Oficial.
           </p>
         </div>
       }
@@ -251,15 +258,22 @@ export const Escrutinio: React.FC<{
                   borderWith: 1,
                 },
                 {
-                  label: 'DCR',
+                  label: 'D1',
                   data: Object.values(graphDataNac).map(partido => partido[1]),
+                  backgroundColor: 'rgba(131, 24, 67, 0.7)',
+                  borderColor: 'rgba(131, 24, 67, 1)',
+                  borderWith: 1,
+                },
+                {
+                  label: 'DCR',
+                  data: Object.values(graphDataNac).map(partido => partido[2]),
                   backgroundColor: 'rgba(251, 191, 36, 0.7)',
                   borderColor: 'rgba(251, 191, 36, 1)',
                   borderWith: 1,
                 },
                 {
                   label: 'DNES',
-                  data: Object.values(graphDataNac).map(partido => partido[2]),
+                  data: Object.values(graphDataNac).map(partido => partido[3]),
                   backgroundColor: 'rgba(220, 38, 38, 0.7)',
                   borderColor: 'rgba(220, 38, 38, 1)',
                   borderWith: 1,
@@ -286,8 +300,15 @@ export const Escrutinio: React.FC<{
                   borderWith: 1,
                 },
                 {
-                  label: 'DNES',
+                  label: 'D1',
                   data: Object.values(graphData).map(partido => partido[1]),
+                  backgroundColor: 'rgba(131, 24, 67, 0.7)',
+                  borderColor: 'rgba(131, 24, 67, 1)',
+                  borderWith: 1,
+                },
+                {
+                  label: 'DNES',
+                  data: Object.values(graphData).map(partido => partido[2]),
                   backgroundColor: 'rgba(220, 38, 38, 0.7)',
                   borderColor: 'rgba(220, 38, 38, 1)',
                   borderWith: 1,

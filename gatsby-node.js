@@ -5,8 +5,24 @@ exports.sourceNodes = ({ actions, createNodeId, createContentDigest }) => {
 
   const processNode = dataFile => {
     const votosTotal = dataFile.reduce((total, partido) => {
-      return total + partido.votos_partido
+      if (
+        [
+          'SAN VICENTE',
+          'CABAÑAS',
+          'CHALATENANGO',
+          'CUSCATLAN',
+          'LA UNION',
+        ].includes(partido.segmento) &&
+        ['N', 'GANA', 'N-GANA', 'ARENA-PCN'].includes(partido.nom_partido)
+      ) {
+        return total
+      } else {
+        return total + partido.votos_partido
+      }
     }, 0)
+
+    const cocienteElectoral =
+      votosTotal / diputadosXdepartamento[dataFile[0].segmento]
 
     const data01 = dataFile.map(partido => {
       if (
@@ -19,23 +35,97 @@ exports.sourceNodes = ({ actions, createNodeId, createContentDigest }) => {
         ].includes(partido.segmento) &&
         ['N', 'GANA', 'N-GANA', 'ARENA-PCN'].includes(partido.nom_partido)
       ) {
-        return Object.assign({}, partido, {
-          diputadosXcociente: 0,
-          residuo: 0,
-        })
-      }
-      const cocienteElectoral =
-        votosTotal / diputadosXdepartamento[partido.segmento]
-      const diputadosXcociente = Math.floor(
-        partido.votos_partido / cocienteElectoral
-      )
-      const residuo = partido.votos_partido % cocienteElectoral
-      // partido.votos_partido - diputadosXcociente * cocienteElectoral
+        const diputadosXcociente = Math.floor(
+          partido.votos_partido / cocienteElectoral
+        )
+        const residuo = [partido.votos_partido % cocienteElectoral, 0]
+        // partido.votos_partido - diputadosXcociente * cocienteElectoral
 
-      return Object.assign({ diputadosXcociente, residuo }, partido)
+        return Object.assign({ diputadosXcociente, residuo }, partido)
+      } else if (
+        ['TOTAL N-GANA', 'TOTAL ARENA-PCN'].includes(partido.nom_partido)
+      ) {
+        const diputadosXcociente = Math.floor(
+          partido.votos_partido / cocienteElectoral
+        )
+        const residuo = [0, partido.votos_partido % cocienteElectoral]
+        // partido.votos_partido - diputadosXcociente * cocienteElectoral
+
+        return Object.assign({ diputadosXcociente, residuo }, partido)
+      } else {
+        const diputadosXcociente = Math.floor(
+          partido.votos_partido / cocienteElectoral
+        )
+        const residuo = [
+          partido.votos_partido % cocienteElectoral,
+          partido.votos_partido % cocienteElectoral,
+        ]
+        // partido.votos_partido - diputadosXcociente * cocienteElectoral
+
+        return Object.assign({ diputadosXcociente, residuo }, partido)
+      }
     })
 
-    const totalDiputadosCociente = data01.reduce((total, partido) => {
+    const totalDiputadosCociente = data01.reduce(
+      (total, partido) => {
+        if (partido.diputadosXcociente === 0) return total
+        if (
+          [
+            'SAN VICENTE',
+            'CABAÑAS',
+            'CHALATENANGO',
+            'CUSCATLAN',
+            'LA UNION',
+          ].includes(partido.segmento) &&
+          ['N', 'GANA', 'N-GANA', 'ARENA-PCN'].includes(partido.nom_partido)
+        ) {
+          return [total[0] + partido.diputadosXcociente, total[1]]
+        } else if (
+          ['TOTAL N-GANA', 'TOTAL ARENA-PCN'].includes(partido.nom_partido)
+        ) {
+          return [total[0], total[1] + partido.diputadosXcociente]
+        } else {
+          return [
+            total[0] + partido.diputadosXcociente,
+            total[1] + partido.diputadosXcociente,
+          ]
+        }
+      },
+      [0, 0]
+    )
+    const diputadosFaltaAsignar = [
+      diputadosXdepartamento[dataFile[0].segmento] - totalDiputadosCociente[0],
+      diputadosXdepartamento[dataFile[0].segmento] - totalDiputadosCociente[1],
+    ]
+
+    const partidosXresiduo = [...data01]
+    partidosXresiduo.sort((a, b) => b.residuo[0] - a.residuo[0])
+    const data02 = {}
+    let count = 0
+    while (diputadosFaltaAsignar[0] && count < diputadosFaltaAsignar[0]) {
+      if (!data02[partidosXresiduo[count].nom_partido]) {
+        data02[partidosXresiduo[count].nom_partido] = [0, 0]
+      }
+      if (
+        ['TOTAL N-GANA', 'TOTAL ARENA-PCN'].includes(
+          partidosXresiduo[count].nom_partido
+        )
+      ) {
+        data02[partidosXresiduo[count].nom_partido][0] = 0
+      } else {
+        data02[partidosXresiduo[count].nom_partido][0] =
+          data02[partidosXresiduo[count].nom_partido][0] + 1
+      }
+      count++
+    }
+
+    partidosXresiduo.sort((a, b) => b.residuo[1] - a.residuo[1])
+    count = 0
+
+    while (diputadosFaltaAsignar[1] && count < diputadosFaltaAsignar[1]) {
+      if (!data02[partidosXresiduo[count].nom_partido]) {
+        data02[partidosXresiduo[count].nom_partido] = [0, 0]
+      }
       if (
         [
           'SAN VICENTE',
@@ -43,31 +133,22 @@ exports.sourceNodes = ({ actions, createNodeId, createContentDigest }) => {
           'CHALATENANGO',
           'CUSCATLAN',
           'LA UNION',
-        ].includes(partido.segmento) &&
-        ['N', 'GANA', 'N-GANA', 'ARENA-PCN'].includes(partido.nom_partido)
+        ].includes(partidosXresiduo[count].segmento) &&
+        ['N', 'GANA', 'N-GANA', 'ARENA-PCN'].includes(
+          partidosXresiduo[count].nom_partido
+        )
       ) {
-        return total
+        data02[partidosXresiduo[count].nom_partido][1] = 0
+      } else {
+        data02[partidosXresiduo[count].nom_partido][1] =
+          data02[partidosXresiduo[count].nom_partido][1] + 1
       }
-      return total + partido.diputadosXcociente
-    }, 0)
-    const diputadosFaltaAsignar =
-      diputadosXdepartamento[dataFile[0].segmento] - totalDiputadosCociente
-
-    const partidosXresiduo = [...data01]
-    partidosXresiduo.sort((a, b) => b.residuo - a.residuo)
-    const data02 = []
-    let count = 0
-    while (diputadosFaltaAsignar && count < diputadosFaltaAsignar) {
-      data02.push(
-        Object.assign({ diputadosXresiduo: 1 }, partidosXresiduo[count])
-      )
       count++
     }
 
     data01.forEach(partido => {
       const currentPartido = Object.assign(
-        { diputadosXresiduo: 0 },
-        data02.filter(p => p.nom_partido === partido.nom_partido).pop(),
+        { diputadosXresiduo: data02[partido.nom_partido] || [0, 0] },
         partido
       )
 
@@ -87,6 +168,7 @@ exports.sourceNodes = ({ actions, createNodeId, createContentDigest }) => {
       }
 
       const node = Object.assign({}, currentPartido, nodeMeta)
+
       createNode(node)
     })
   }
