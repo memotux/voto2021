@@ -56,7 +56,11 @@ export const Segmento: React.FC<EscrutinioProps> = ({
             </dl>
             <dl className="more-info">
               <dt>R:</dt>
-              <dd>{partido.residuo[0].toLocaleString()}</dd>
+              <dd>
+                {partido.residuo[0]?.toLocaleString() ||
+                  partido.residuo[1]?.toLocaleString() ||
+                  0}
+              </dd>
               <dt>VV:</dt>
               <dd>{partido.votos_partido.toLocaleString()}</dd>
             </dl>
