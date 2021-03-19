@@ -31,6 +31,12 @@ export const Segmento: React.FC<EscrutinioProps> = ({
           <Field key={`nom-partido-${partido.nom_partido}`}>
             <p>{partido.nom_partido}</p>
             <dl className="grid grid-cols-2">
+              <dt className="dip-elec">DEF:</dt>
+              <dd className="dip-elec">
+                {['N-GANA', 'ARENA-PCN'].includes(partido.nom_partido)
+                  ? 0
+                  : partido.diputadosXcociente + partido.diputadosXresiduo[1]}
+              </dd>
               <dt>DEP:</dt>
               <dd>
                 {['TOTAL N-GANA', 'TOTAL ARENA-PCN'].includes(
@@ -39,18 +45,15 @@ export const Segmento: React.FC<EscrutinioProps> = ({
                   ? 0
                   : partido.diputadosXcociente + partido.diputadosXresiduo[0]}
               </dd>
-              <dt>DEF:</dt>
-              <dd>
-                {['N-GANA', 'ARENA-PCN'].includes(partido.nom_partido)
-                  ? 0
-                  : partido.diputadosXcociente + partido.diputadosXresiduo[1]}
-              </dd>
+
               <dt>DNES:</dt>
               <dd>{dpnes ? dpnes.diputados : 0}</dd>
-              {/* <dt>R:</dt>
-              <dd>{partido.residuo.toLocaleString()}</dd>
+            </dl>
+            <dl className="more-info">
+              <dt>R:</dt>
+              <dd>{partido.residuo[0].toLocaleString()}</dd>
               <dt>VV:</dt>
-              <dd>{partido.votos_partido.toLocaleString()}</dd> */}
+              <dd>{partido.votos_partido.toLocaleString()}</dd>
             </dl>
           </Field>
         )
