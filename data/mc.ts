@@ -353,3 +353,349 @@ export const diputadosXdepartamenotSegunNES: Array<{
     fieldValue: 'USULUTAN',
   },
 ]
+
+export const diputadosTSE = [
+  {
+    nodes: [
+      {
+        partido: 'N',
+        diputados: 0,
+      },
+      {
+        partido: 'ARENA',
+        diputados: 0,
+      },
+      {
+        partido: 'FMLN',
+        diputados: 0,
+      },
+      {
+        partido: 'GANA',
+        diputados: 0,
+      },
+      {
+        partido: 'PCN',
+        diputados: 0,
+      },
+      {
+        partido: 'NUESTRO TIEMPO',
+        diputados: 0,
+      },
+      {
+        partido: 'NT',
+        diputados: 0,
+      },
+      {
+        partido: 'PDC',
+        diputados: 0,
+      },
+      {
+        partido: 'VAMOS',
+        diputados: 0,
+      },
+      {
+        partido: 'CD',
+        diputados: 0,
+      },
+      {
+        partido: 'NP',
+        diputados: 0,
+      },
+    ],
+    fieldValue: 'NACIONAL',
+  },
+  {
+    nodes: [
+      {
+        partido: 'N',
+        diputados: 0,
+      },
+      {
+        partido: 'PCN',
+        diputados: 0,
+      },
+      {
+        partido: 'COALICIÓN ARENA',
+        diputados: 0,
+      },
+      {
+        partido: 'ARENA-DS',
+        diputados: 0,
+      },
+    ],
+    fieldValue: 'AHUACHAPAN',
+  },
+  {
+    nodes: [
+      {
+        partido: 'COALICIÓN N-GANA',
+        diputados: 0,
+      },
+      {
+        partido: 'TOTAL N-GANA',
+        diputados: 0,
+      },
+      {
+        partido: 'ARENA',
+        diputados: 0,
+      },
+    ],
+    fieldValue: 'CABAÑAS',
+  },
+  {
+    nodes: [
+      {
+        partido: 'COALICIÓN N-GANA',
+        diputados: 0,
+      },
+      {
+        partido: 'TOTAL N-GANA',
+        diputados: 0,
+      },
+      {
+        partido: 'COALICIÓN PCN',
+        diputados: 0,
+      },
+      {
+        partido: 'PCN-DS',
+        diputados: 0,
+      },
+      {
+        partido: 'N',
+        diputados: 0,
+      },
+    ],
+    fieldValue: 'CHALATENANGO',
+  },
+  {
+    nodes: [
+      {
+        partido: 'COALICIÓN N-GANA',
+        diputados: 0,
+      },
+      {
+        partido: 'TOTAL N-GANA',
+        diputados: 0,
+      },
+      {
+        partido: 'N',
+        diputados: 0,
+      },
+      {
+        partido: 'ARENA',
+        diputados: 0,
+      },
+    ],
+    fieldValue: 'CUSCATLAN',
+  },
+  {
+    nodes: [
+      {
+        partido: 'N',
+        diputados: 0,
+      },
+      {
+        partido: 'ARENA',
+        diputados: 0,
+      },
+      {
+        partido: 'GANA',
+        diputados: 0,
+      },
+    ],
+    fieldValue: 'LA LIBERTAD',
+  },
+  {
+    nodes: [
+      {
+        partido: 'N',
+        diputados: 0,
+      },
+      {
+        partido: 'ARENA',
+        diputados: 0,
+      },
+      {
+        partido: 'GANA',
+        diputados: 0,
+      },
+    ],
+    fieldValue: 'LA PAZ',
+  },
+  {
+    nodes: [
+      {
+        partido: 'COALICIÓN N-GANA',
+        diputados: 0,
+      },
+      {
+        partido: 'TOTAL N-GANA',
+        diputados: 0,
+      },
+      {
+        partido: 'N',
+        diputados: 0,
+      },
+      {
+        partido: 'ARENA',
+        diputados: 0,
+      },
+    ],
+    fieldValue: 'LA UNION',
+  },
+  {
+    nodes: [
+      {
+        partido: 'N',
+        diputados: 0,
+      },
+      {
+        partido: 'FMLN',
+        diputados: 0,
+      },
+    ],
+    fieldValue: 'MORAZAN',
+  },
+  {
+    nodes: [
+      {
+        partido: 'N',
+        diputados: 0,
+      },
+      {
+        partido: 'PDC',
+        diputados: 0,
+      },
+      {
+        partido: 'FMLN',
+        diputados: 0,
+      },
+      {
+        partido: 'GANA',
+        diputados: 0,
+      },
+    ],
+    fieldValue: 'SAN MIGUEL',
+  },
+  {
+    nodes: [
+      {
+        partido: 'N',
+        diputados: 0,
+      },
+      {
+        partido: 'COALICIÓN ARENA',
+        diputados: 0,
+      },
+      {
+        partido: 'ARENA-DS',
+        diputados: 0,
+      },
+      {
+        partido: 'FMLN',
+        diputados: 0,
+      },
+      {
+        partido: 'GANA',
+        diputados: 0,
+      },
+      {
+        partido: 'NUESTRO TIEMPO',
+        diputados: 0,
+      },
+      {
+        partido: 'NT',
+        diputados: 0,
+      },
+      {
+        partido: 'VAMOS',
+        diputados: 0,
+      },
+    ],
+    fieldValue: 'SAN SALVADOR',
+  },
+  {
+    nodes: [
+      {
+        partido: 'COALICIÓN N-GANA',
+        diputados: 0,
+      },
+      {
+        partido: 'TOTAL N-GANA',
+        diputados: 0,
+      },
+      {
+        partido: 'N',
+        diputados: 0,
+      },
+      {
+        partido: 'COALICIÓN ARENA-PCN',
+        diputados: 0,
+      },
+      {
+        partido: 'ARENA-PCN',
+        diputados: 0,
+      },
+      {
+        partido: 'TOTAL ARENA-PCN',
+        diputados: 0,
+      },
+    ],
+    fieldValue: 'SAN VICENTE',
+  },
+  {
+    nodes: [
+      {
+        partido: 'N',
+        diputados: 0,
+      },
+      {
+        partido: 'ARENA',
+        diputados: 0,
+      },
+      {
+        partido: 'GANA',
+        diputados: 0,
+      },
+    ],
+    fieldValue: 'SANTA ANA',
+  },
+  {
+    nodes: [
+      {
+        partido: 'N',
+        diputados: 0,
+      },
+      {
+        partido: 'ARENA',
+        diputados: 0,
+      },
+      {
+        partido: 'GANA',
+        diputados: 0,
+      },
+    ],
+    fieldValue: 'SONSONATE',
+  },
+  {
+    nodes: [
+      {
+        partido: 'N',
+        diputados: 0,
+      },
+      {
+        partido: 'FMLN',
+        diputados: 0,
+      },
+      {
+        partido: 'ARENA',
+        diputados: 0,
+      },
+      {
+        partido: 'GANA',
+        diputados: 0,
+      },
+    ],
+    fieldValue: 'USULUTAN',
+  },
+]

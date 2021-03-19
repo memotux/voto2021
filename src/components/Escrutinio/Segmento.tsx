@@ -8,6 +8,7 @@ export const Segmento: React.FC<EscrutinioProps> = ({
   segmento,
   dataSegment,
   dnes,
+  dtse,
 }) => {
   if (!dataByPublicacion || !dataSegment) return null
   return (
@@ -26,18 +27,22 @@ export const Segmento: React.FC<EscrutinioProps> = ({
       {dataByPublicacion.map(partido => {
         const dpnes =
           dnes?.nodes.find(p => p.partido === partido.nom_partido) || null
+        const dptse =
+          dtse?.nodes.find(p => p.partido === partido.nom_partido) || null
 
         return (
           <Field key={`nom-partido-${partido.nom_partido}`}>
             <p>{partido.nom_partido}</p>
             <dl className="grid grid-cols-2">
-              <dt className="dip-elec">DEF:</dt>
+              <dt className="dip-tse">TSE:</dt>
+              <dd className="dip-tse">{dptse ? dptse.diputados : 0}</dd>
+              <dt className="dip-elec">DC:</dt>
               <dd className="dip-elec">
                 {['N-GANA', 'ARENA-PCN'].includes(partido.nom_partido)
                   ? 0
                   : partido.diputadosXcociente + partido.diputadosXresiduo[1]}
               </dd>
-              <dt>DEP:</dt>
+              <dt>DP:</dt>
               <dd>
                 {['TOTAL N-GANA', 'TOTAL ARENA-PCN'].includes(
                   partido.nom_partido

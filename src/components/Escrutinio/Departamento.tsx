@@ -7,11 +7,12 @@ export const Departamento: React.FC<EscrutinioProps> = ({
   dataByPublicacion,
   dataSegment,
   dnes,
+  dtse,
 }) => {
   return (
     <section className="grid justify-items-center place-items-center w-full divide-blue-900 divide-y-2">
       <h2>Diputados Electos por {segmento}</h2>
-      <Segmento {...{ dataByPublicacion, segmento, dataSegment, dnes }} />
+      <Segmento {...{ dataByPublicacion, segmento, dataSegment, dnes, dtse }} />
     </section>
   )
 }

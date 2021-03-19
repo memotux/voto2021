@@ -60,8 +60,11 @@
   div.field h3 {
     @apply text-gray-900;
   }
-  div.field .dip-elec {
+  div.field .dip-tse {
     @apply text-blue-900 font-semibold;
+  }
+  div.field .dip-elec {
+    @apply text-indigo-900;
   }
   div.field:hover,
   div.field:focus {

@@ -3,6 +3,7 @@ import moment from 'moment'
 import { Nacional, Departamento } from '.'
 import {
   diputadosSegunMC,
+  diputadosTSE,
   diputadosXdepartamenotSegunNES,
 } from '../../../data/mc'
 import { dataByDepartment, dataNode } from '../../pages'
@@ -20,6 +21,15 @@ export interface EscrutinioProps {
     [key: string]: [number, number]
   } | null
   dnes:
+    | {
+        nodes: {
+          partido: string
+          diputados: number
+        }[]
+        fieldValue: string
+      }
+    | undefined
+  dtse:
     | {
         nodes: {
           partido: string
@@ -119,6 +129,9 @@ export const Escrutinio: React.FC<{
     }, {})
   }, [group, publicacion])
 
+  /**
+   * Diputados segun Noticiero El Salvador
+   */
   const dnes =
     segmento === 'NACIONAL'
       ? { nodes: diputadosSegunMC, fieldValue: 'NACIONAL' }
@@ -126,21 +139,30 @@ export const Escrutinio: React.FC<{
           department => department.fieldValue === segmento
         )
 
+  /**
+   * Diputados segun TSE
+   */
+  const dtse = React.useMemo(() => {
+    return diputadosTSE.find(department => department.fieldValue === segmento)
+  }, [segmento])
+
   const graphData = React.useMemo(() => {
     return (
       dataByPublicacion?.reduce<{ [key: string]: number[] }>(
         (data, partido) => {
-          if (!dnes) return data
+          if (!dnes || !dtse) return data
           if (!data[partido.nom_partido]) {
             data[partido.nom_partido] = []
           }
           data[partido.nom_partido].push(
-            ['TOTAL N-GANA', 'TOTAL ARENA-PCN'].includes(partido.nom_partido)
-              ? 0
-              : partido.diputadosXcociente + partido.diputadosXresiduo[0],
+            (dtse.nodes.find(p => p.partido === partido.nom_partido)
+              ?.diputados as number) || 0,
             ['N-GANA', 'ARENA-PCN'].includes(partido.nom_partido)
               ? 0
               : partido.diputadosXcociente + partido.diputadosXresiduo[1],
+            ['TOTAL N-GANA', 'TOTAL ARENA-PCN'].includes(partido.nom_partido)
+              ? 0
+              : partido.diputadosXcociente + partido.diputadosXresiduo[0],
             (dnes.nodes.find(p => p.partido === partido.nom_partido)
               ?.diputados as number) || 0
           )
@@ -159,12 +181,19 @@ export const Escrutinio: React.FC<{
           if (!data[partido.nom_partido]) {
             data[partido.nom_partido] = []
           }
-
+          /**
+           * [0] = diputados electos
+           * [1] = diputados segun coaliciones
+           * [2] = diputados segun partidos sin coaliciones
+           * [3] = diputados medios de comunicacion
+           */
           data[partido.nom_partido].push(
-            dnpsd[partido.nom_partido][0],
+            (dtse?.nodes.find(p => p.partido === partido.nom_partido)
+              ?.diputados as number) || 0,
             ['N-GANA', 'ARENA-PCN'].includes(partido.nom_partido)
               ? dnpsd[`TOTAL ${partido.nom_partido}`][1]
               : dnpsd[partido.nom_partido][1],
+            dnpsd[partido.nom_partido][0],
             ['N-GANA', 'ARENA-PCN'].includes(partido.nom_partido)
               ? partido.diputadosXcociente + partido.diputadosXresiduo[0]
               : partido.diputadosXcociente + partido.diputadosXresiduo[1],
@@ -255,14 +284,21 @@ export const Escrutinio: React.FC<{
               labels: Object.keys(graphDataNac),
               datasets: [
                 {
-                  label: 'D',
+                  label: 'TSE',
                   data: Object.values(graphDataNac).map(partido => partido[0]),
                   backgroundColor: 'rgba(30, 58, 138, 0.7)',
                   borderColor: 'rgba(30, 58, 138, 1)',
                   borderWith: 1,
                 },
                 {
-                  label: 'D1',
+                  label: 'DC',
+                  data: Object.values(graphDataNac).map(partido => partido[1]),
+                  backgroundColor: 'rgba(55, 48, 163, 0.7)',
+                  borderColor: 'rgba(55, 48, 163, 1)',
+                  borderWith: 1,
+                },
+                {
+                  label: 'DP',
                   data: Object.values(graphDataNac).map(partido => partido[1]),
                   backgroundColor: 'rgba(131, 24, 67, 0.7)',
                   borderColor: 'rgba(131, 24, 67, 1)',
@@ -285,26 +321,33 @@ export const Escrutinio: React.FC<{
               ],
             }}
           />
-          <Nacional {...{ segmento, dataNacional, dnes, dnpsd }} />
+          <Nacional {...{ segmento, dataNacional, dnes, dnpsd, dtse }} />
         </>
       ) : (
         <>
           <Departamento
-            {...{ segmento, dataByPublicacion, dataSegment, dnes }}
+            {...{ segmento, dataByPublicacion, dataSegment, dnes, dtse }}
           />
           <Graph
             graphData={{
               labels: Object.keys(graphData),
               datasets: [
                 {
-                  label: 'D',
+                  label: 'TSE',
                   data: Object.values(graphData).map(partido => partido[0]),
                   backgroundColor: 'rgba(30, 58, 138, 0.7)',
                   borderColor: 'rgba(30, 58, 138, 1)',
                   borderWith: 1,
                 },
                 {
-                  label: 'D1',
+                  label: 'DC',
+                  data: Object.values(graphData).map(partido => partido[1]),
+                  backgroundColor: 'rgba(55, 48, 163, 0.7)',
+                  borderColor: 'rgba(55, 48, 163, 1)',
+                  borderWith: 1,
+                },
+                {
+                  label: 'DP',
                   data: Object.values(graphData).map(partido => partido[1]),
                   backgroundColor: 'rgba(131, 24, 67, 0.7)',
                   borderColor: 'rgba(131, 24, 67, 1)',

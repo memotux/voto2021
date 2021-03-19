@@ -11,6 +11,7 @@ export const Nacional: React.FC<EscrutinioProps> = ({
   dataNacional,
   dnes,
   dnpsd,
+  dtse,
 }) => {
   if (!dataNacional || !dnpsd) return null
   const segmentNacion = dataNacional.find(
@@ -43,18 +44,22 @@ export const Nacional: React.FC<EscrutinioProps> = ({
         {segmentNacion.nodes.map(partido => {
           const dpnes =
             dnes?.nodes.find(p => p.partido === partido.nom_partido) || null
+          const dptse =
+            dtse?.nodes.find(p => p.partido === partido.nom_partido) || null
 
           return (
             <Field key={`nom-partido-${partido.nom_partido}`}>
               <p>{partido.nom_partido}</p>
               <dl className="grid grid-cols-2">
-                <dt className="dip-elec">DEF:</dt>
+                <dt className="dip-tse">TSE:</dt>
+                <dd className="dip-tse">{dptse ? dptse.diputados : 0}</dd>
+                <dt className="dip-elec">DC:</dt>
                 <dd className="dip-elec">
                   {['N-GANA', 'ARENA-PCN'].includes(partido.nom_partido)
                     ? dnpsd[`TOTAL ${partido.nom_partido}`][1]
                     : dnpsd[partido.nom_partido][1]}
                 </dd>
-                <dt>DEP:</dt>
+                <dt>DP:</dt>
                 <dd>
                   {['N-GANA', 'ARENA-PCN'].includes(partido.nom_partido)
                     ? dnpsd[`TOTAL ${partido.nom_partido}`][0]
@@ -99,6 +104,7 @@ export const Nacional: React.FC<EscrutinioProps> = ({
                 segmento: departamento.fieldValue,
                 dataSegment,
                 dnes,
+                dtse,
               }}
             />
           )
