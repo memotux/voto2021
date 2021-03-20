@@ -1,6 +1,6 @@
 import React from 'react'
-import { diputadosXdepartamenotSegunNES } from '../../../data/mc'
-import { dataNode } from '../../pages'
+import { diputadosTSE, diputadosXdepartamenotSegunNES } from '../../../data/mc'
+import { dataByDepartment, dataNode } from '../../pages'
 import { processDepartmentData } from '../../utils'
 import Field from '../Field'
 import Row from '../Row'
@@ -89,27 +89,28 @@ export const Nacional: React.FC<EscrutinioProps> = ({
           )
         })}
       </Row>
-      {(dataNacional as { nodes: dataNode[]; fieldValue: string }[]).map(
-        departamento => {
-          if (departamento.fieldValue === 'NACIONAL') return null
-          const dnes = diputadosXdepartamenotSegunNES.find(
-            department => department.fieldValue === departamento.fieldValue
-          )
-          const dataSegment = processDepartmentData(departamento)
-          return (
-            <Segmento
-              key={`dataNacional-${departamento.fieldValue}`}
-              {...{
-                dataByPublicacion: departamento.nodes,
-                segmento: departamento.fieldValue,
-                dataSegment,
-                dnes,
-                dtse,
-              }}
-            />
-          )
-        }
-      )}
+      {(dataNacional as dataByDepartment[]).map(departamento => {
+        if (departamento.fieldValue === 'NACIONAL') return null
+        const dnes = diputadosXdepartamenotSegunNES.find(
+          department => department.fieldValue === departamento.fieldValue
+        )
+        const dataSegment = processDepartmentData(departamento)
+        const dtse = diputadosTSE.find(
+          department => department.fieldValue === departamento.fieldValue
+        )
+        return (
+          <Segmento
+            key={`dataNacional-${departamento.fieldValue}`}
+            {...{
+              dataByPublicacion: departamento.nodes,
+              segmento: departamento.fieldValue,
+              dataSegment,
+              dnes,
+              dtse,
+            }}
+          />
+        )
+      })}
     </section>
   )
 }

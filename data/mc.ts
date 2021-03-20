@@ -359,23 +359,39 @@ export const diputadosTSE = [
     nodes: [
       {
         partido: 'N',
-        diputados: 0,
+        diputados: 2 + 2 + 3 + 4 + 3 + 7 + 3 + 5 + 17,
+      },
+      {
+        partido: 'N-GANA',
+        diputados: 2 + 2 + 2 + 2 + 2,
       },
       {
         partido: 'ARENA',
-        diputados: 0,
+        diputados: 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1,
+      },
+      {
+        partido: 'ARENA-PCN',
+        diputados: 1,
+      },
+      {
+        partido: 'ARENA-DS',
+        diputados: 1 + 3,
       },
       {
         partido: 'FMLN',
-        diputados: 0,
+        diputados: 1 + 1 + 1 + 1,
       },
       {
         partido: 'GANA',
-        diputados: 0,
+        diputados: 1 + 1 + 1 + 1 + 1,
       },
       {
         partido: 'PCN',
-        diputados: 0,
+        diputados: 1,
+      },
+      {
+        partido: 'PCN-DS',
+        diputados: 1,
       },
       {
         partido: 'NUESTRO TIEMPO',
@@ -383,15 +399,15 @@ export const diputadosTSE = [
       },
       {
         partido: 'NT',
-        diputados: 0,
+        diputados: 1,
       },
       {
         partido: 'PDC',
-        diputados: 0,
+        diputados: 1,
       },
       {
         partido: 'VAMOS',
-        diputados: 0,
+        diputados: 1,
       },
       {
         partido: 'CD',
@@ -408,11 +424,11 @@ export const diputadosTSE = [
     nodes: [
       {
         partido: 'N',
-        diputados: 0,
+        diputados: 2,
       },
       {
         partido: 'PCN',
-        diputados: 0,
+        diputados: 1,
       },
       {
         partido: 'COALICIÓN ARENA',
@@ -420,7 +436,7 @@ export const diputadosTSE = [
       },
       {
         partido: 'ARENA-DS',
-        diputados: 0,
+        diputados: 1,
       },
     ],
     fieldValue: 'AHUACHAPAN',
@@ -433,11 +449,11 @@ export const diputadosTSE = [
       },
       {
         partido: 'TOTAL N-GANA',
-        diputados: 0,
+        diputados: 2,
       },
       {
         partido: 'ARENA',
-        diputados: 0,
+        diputados: 1,
       },
     ],
     fieldValue: 'CABAÑAS',
@@ -450,7 +466,7 @@ export const diputadosTSE = [
       },
       {
         partido: 'TOTAL N-GANA',
-        diputados: 0,
+        diputados: 2,
       },
       {
         partido: 'COALICIÓN PCN',
@@ -458,7 +474,7 @@ export const diputadosTSE = [
       },
       {
         partido: 'PCN-DS',
-        diputados: 0,
+        diputados: 1,
       },
       {
         partido: 'N',
@@ -475,7 +491,7 @@ export const diputadosTSE = [
       },
       {
         partido: 'TOTAL N-GANA',
-        diputados: 0,
+        diputados: 2,
       },
       {
         partido: 'N',
@@ -483,7 +499,7 @@ export const diputadosTSE = [
       },
       {
         partido: 'ARENA',
-        diputados: 0,
+        diputados: 1,
       },
     ],
     fieldValue: 'CUSCATLAN',
@@ -492,15 +508,15 @@ export const diputadosTSE = [
     nodes: [
       {
         partido: 'N',
-        diputados: 0,
+        diputados: 7,
       },
       {
         partido: 'ARENA',
-        diputados: 0,
+        diputados: 2,
       },
       {
         partido: 'GANA',
-        diputados: 0,
+        diputados: 1,
       },
     ],
     fieldValue: 'LA LIBERTAD',
@@ -509,11 +525,11 @@ export const diputadosTSE = [
     nodes: [
       {
         partido: 'N',
-        diputados: 0,
+        diputados: 3,
       },
       {
         partido: 'ARENA',
-        diputados: 0,
+        diputados: 1,
       },
       {
         partido: 'GANA',
@@ -530,7 +546,7 @@ export const diputadosTSE = [
       },
       {
         partido: 'TOTAL N-GANA',
-        diputados: 0,
+        diputados: 2,
       },
       {
         partido: 'N',
@@ -538,7 +554,7 @@ export const diputadosTSE = [
       },
       {
         partido: 'ARENA',
-        diputados: 0,
+        diputados: 1,
       },
     ],
     fieldValue: 'LA UNION',
@@ -547,11 +563,11 @@ export const diputadosTSE = [
     nodes: [
       {
         partido: 'N',
-        diputados: 0,
+        diputados: 2,
       },
       {
         partido: 'FMLN',
-        diputados: 0,
+        diputados: 1,
       },
     ],
     fieldValue: 'MORAZAN',
@@ -560,19 +576,19 @@ export const diputadosTSE = [
     nodes: [
       {
         partido: 'N',
-        diputados: 0,
+        diputados: 3,
       },
       {
         partido: 'PDC',
-        diputados: 0,
+        diputados: 1,
       },
       {
         partido: 'FMLN',
-        diputados: 0,
+        diputados: 1,
       },
       {
         partido: 'GANA',
-        diputados: 0,
+        diputados: 1,
       },
     ],
     fieldValue: 'SAN MIGUEL',
@@ -581,7 +597,7 @@ export const diputadosTSE = [
     nodes: [
       {
         partido: 'N',
-        diputados: 0,
+        diputados: 17,
       },
       {
         partido: 'COALICIÓN ARENA',
@@ -589,15 +605,15 @@ export const diputadosTSE = [
       },
       {
         partido: 'ARENA-DS',
-        diputados: 0,
+        diputados: 3,
       },
       {
         partido: 'FMLN',
-        diputados: 0,
+        diputados: 1,
       },
       {
         partido: 'GANA',
-        diputados: 0,
+        diputados: 1,
       },
       {
         partido: 'NUESTRO TIEMPO',
@@ -605,11 +621,11 @@ export const diputadosTSE = [
       },
       {
         partido: 'NT',
-        diputados: 0,
+        diputados: 1,
       },
       {
         partido: 'VAMOS',
-        diputados: 0,
+        diputados: 1,
       },
     ],
     fieldValue: 'SAN SALVADOR',
@@ -622,7 +638,7 @@ export const diputadosTSE = [
       },
       {
         partido: 'TOTAL N-GANA',
-        diputados: 0,
+        diputados: 2,
       },
       {
         partido: 'N',
@@ -638,7 +654,7 @@ export const diputadosTSE = [
       },
       {
         partido: 'TOTAL ARENA-PCN',
-        diputados: 0,
+        diputados: 1,
       },
     ],
     fieldValue: 'SAN VICENTE',
@@ -647,15 +663,15 @@ export const diputadosTSE = [
     nodes: [
       {
         partido: 'N',
-        diputados: 0,
+        diputados: 5,
       },
       {
         partido: 'ARENA',
-        diputados: 0,
+        diputados: 1,
       },
       {
         partido: 'GANA',
-        diputados: 0,
+        diputados: 1,
       },
     ],
     fieldValue: 'SANTA ANA',
@@ -664,15 +680,15 @@ export const diputadosTSE = [
     nodes: [
       {
         partido: 'N',
-        diputados: 0,
+        diputados: 4,
       },
       {
         partido: 'ARENA',
-        diputados: 0,
+        diputados: 1,
       },
       {
         partido: 'GANA',
-        diputados: 0,
+        diputados: 1,
       },
     ],
     fieldValue: 'SONSONATE',
@@ -681,15 +697,15 @@ export const diputadosTSE = [
     nodes: [
       {
         partido: 'N',
-        diputados: 0,
+        diputados: 3,
       },
       {
         partido: 'FMLN',
-        diputados: 0,
+        diputados: 1,
       },
       {
         partido: 'ARENA',
-        diputados: 0,
+        diputados: 1,
       },
       {
         partido: 'GANA',
