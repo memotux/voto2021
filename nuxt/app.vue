@@ -18,6 +18,19 @@ useSeoMeta({
   twitterDescription:
     'Voto 2021, Asamblea Legislativa,  Resultados Preliminares y Finales. Se exponen inconsistencias con las publicaciones de Medios de Comunicación.',
 })
+
+const store = useStore()
+
+const { data } = await useFetch('/api/efinal', {
+  key: 'efinal#nacional#latest',
+})
+
+store.value.publicaciones = data.value.data.publicaciones.map((p: string) =>
+  p.split('#').pop(),
+)
+store.value.publicacion = store.value.publicaciones?.slice(-1).pop()
+store.value.segmentos = Object.keys(data.value.data.segmentos)
+store.value.votosTotal = data.value.data.votosTotal
 </script>
 
 <template>

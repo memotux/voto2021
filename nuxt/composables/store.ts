@@ -3,6 +3,7 @@ interface StoreState {
   publicacion?: string
   publicaciones?: string[]
   segmentos?: string[]
+  votosTotal?: number
 }
 
 export const useStore = () => useState<StoreState>('store', () => ({
