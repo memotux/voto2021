@@ -25,12 +25,15 @@ const { data } = await useFetch('/api/efinal', {
   key: 'efinal#nacional#latest',
 })
 
-store.value.publicaciones = data.value.data.publicaciones.map((p: string) =>
-  p.split('#').pop(),
-)
-store.value.publicacion = store.value.publicaciones?.slice(-1).pop()
-store.value.segmentos = Object.keys(data.value.data.segmentos)
-store.value.votosTotal = data.value.data.votosTotal
+store.value = {
+  segmento: 'NACIONAL',
+  publicaciones: data.value.data.publicaciones.map((p: string) =>
+    p.split('#').pop(),
+  ),
+  publicacion: store.value.publicaciones?.slice(-1).pop(),
+  departamentos: Object.keys(data.value.data.segmentos),
+  votosTotal: data.value.data.votosTotal,
+}
 </script>
 
 <template>
