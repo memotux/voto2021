@@ -122,7 +122,7 @@ export default defineEventHandler<EFinalRequest>((event) => {
     }
   }
 
-  const publicacion = eFinalData.find(d => d?.publicacion === query.publicacion)
+  const publicacion = eFinalData.find(d => d?.publicacion.endsWith(query.publicacion || ''))
 
   if (!publicacion) {
     throw createError({
