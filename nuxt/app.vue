@@ -5,6 +5,7 @@ useHead({
       ? `${titleChunk} | Voto 2021 | Asamblea Legislativa`
       : 'Voto 2021 | Asamblea Legislativa'
   },
+  htmlAttrs: { lang: 'es-SV' },
 })
 useSeoMeta({
   description:
