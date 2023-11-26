@@ -17,18 +17,22 @@ const store = useStore()
       class="sm:grid sm:justify-items-center sm:place-items-center w-full p-4 sm:overflow-x-auto sm:space-x-4"
       style="grid-template-columns: repeat(2, minmax(150px, 1fr))"
     >
-      <USelect
-        v-model="store.segmento"
-        size="md"
-        placeholder="Departamento..."
-        :options="store.segmentos"
-      />
-      <USelect
-        v-model="store.publicacion"
-        size="md"
-        placeholder="Publicaciones..."
-        :options="store.publicaciones"
-      />
+      <div>
+        <p class="pb-2">Selecciona Departamento:</p>
+        <USelect
+          v-model="store.segmento"
+          size="md"
+          :options="store.segmentos"
+        />
+      </div>
+      <div>
+        <p class="pb-2">Selecciona Publicacion:</p>
+        <USelect
+          v-model="store.publicacion"
+          size="md"
+          :options="store.publicaciones"
+        />
+      </div>
     </div>
   </UContainer>
 </template>
