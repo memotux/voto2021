@@ -17,7 +17,5 @@
       <NuxtLink href="/preliminar">Preliminar</NuxtLink>
     </nav>
   </header>
-  <UContainer as="main">
-    <slot />
-  </UContainer>
+  <slot />
 </template>

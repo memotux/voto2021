@@ -1,7 +1,7 @@
 <script lang="ts" setup></script>
 
 <template>
-  <UContainer>
+  <UContainer as="main">
     <h1>Escrutinio Final</h1>
   </UContainer>
 </template>
