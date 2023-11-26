@@ -33,6 +33,7 @@ store.value = {
   publicacion: store.value.publicaciones?.slice(-1).pop(),
   departamentos: Object.keys(data.value.data.segmentos),
   votosTotal: data.value.data.votosTotal,
+  segmentos: data.value.data.segmentos,
 }
 </script>
 

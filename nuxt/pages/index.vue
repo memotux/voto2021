@@ -4,6 +4,17 @@ useSeoMeta({
   ogTitle: 'Escrutinio Final | Voto 2021 | Asamblea Legislativa',
 })
 const store = useStore()
+
+watch(
+  () => store.value.publicacion,
+  async () => {
+    const { data } = await useFetch('/api/efinal', {
+      query: { publicacion: store.value.publicacion },
+    })
+    store.value.votosTotal = data.value.data.votosTotal
+    store.value.segmentos = data.value.data.segmentos
+  },
+)
 </script>
 
 <template>
@@ -22,7 +33,7 @@ const store = useStore()
         <USelect
           v-model="store.segmento"
           size="md"
-          :options="store.segmentos"
+          :options="store.departamentos"
         />
       </div>
       <div>
