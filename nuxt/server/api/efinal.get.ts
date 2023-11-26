@@ -1,11 +1,9 @@
 import fs from 'node:fs'
 import { Window } from 'happy-dom'
-import { diputadosXdepartamento } from '../utils'
 
 interface EFinalRequest {
   query: {
-    fields?: string
-    init?: boolean
+    publicacion?: string
   }
 }
 
@@ -16,12 +14,14 @@ interface EFinalData {
   publicacion: string
 }
 
-const files = fs.readdirSync(`../data/efinal/`, {
+const DATA_URL = '../data/efinal/'
+
+const files = fs.readdirSync(DATA_URL, {
   encoding: 'utf-8',
 })
 
-const eFinalData = files.slice(-1).map((name) => {
-  const text = fs.readFileSync(`../data/efinal/${name}`, { encoding: 'utf-8' })
+const eFinalData = files.map((name) => {
+  const text = fs.readFileSync(`${DATA_URL}${name}`, { encoding: 'utf-8' })
   const window = new Window()
   const document = window.document
   document.write(text)
@@ -110,18 +110,32 @@ const eFinalData = files.slice(-1).map((name) => {
 export default defineEventHandler<EFinalRequest>((event) => {
   const query = getQuery(event)
 
-  if (query.init) {
-    const slice = eFinalData.slice(-1)[0]
+  if (!query.publicacion) {
+    const nacional = eFinalData.slice(-1)[0]
     return {
       data: {
-        publicacion: slice?.publicacion,
-        votosTotal: slice?.votosTotal,
-        segmentos: Object.keys(slice?.bySegment || {})
+        publicacion: nacional?.publicacion,
+        votosTotal: nacional?.votosTotal,
+        segmentos: nacional?.bySegment,
+        publicaciones: eFinalData.map((d) => d?.publicacion)
       }
     }
   }
 
+  const publicacion = eFinalData.find(d => d?.publicacion === query.publicacion)
+
+  if (!publicacion) {
+    throw createError({
+      statusMessage: 'Bad Request. Error while finding publicacion',
+      statusCode: 400
+    })
+  }
+
   return {
-    data: eFinalData
+    data: {
+      publicacion: publicacion?.publicacion,
+      votosTotal: publicacion?.votosTotal,
+      segmentos: publicacion?.bySegment,
+    }
   }
 })
