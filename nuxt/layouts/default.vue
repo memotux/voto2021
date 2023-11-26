@@ -12,14 +12,15 @@
     <nav class="grid sm:grid-cols-3 place-items-center place-content-around">
       <p class="text-white mb-2 sm:mb-0">Escrutinio:</p>
       <ULink
-        class="mb-2 sm:mb-0 hover:bg-transparent hover:border-primary-200"
+        class="mb-2 sm:mb-0 hover:text-white border border-transparent hover:border-solid hover:border-primary-400 hover:bg-transparent rounded-lg px-3 py-2 transition"
         to="/"
-        active-class="text-primary-800 bg-primary-400 rounded-lg px-3 py-2"
+        active-class="text-primary-800 bg-primary-400"
         >Final</ULink
       >
       <ULink
         to="/preliminar"
-        active-class="text-primary-800 bg-primary-400 rounded-lg px-3 py-2"
+        class="hover:text-white border border-transparent hover:border-solid hover:bg-transparent hover:border-primary-400 rounded-lg px-3 py-2 transition"
+        active-class="text-primary-800 bg-primary-400"
         >Preliminar</ULink
       >
     </nav>
