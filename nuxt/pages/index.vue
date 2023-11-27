@@ -22,7 +22,7 @@ watch(
     <h1>Escrutinio Final</h1>
     <h2>
       Total de votos:
-      {{ new Intl.NumberFormat('es-SV').format(store.votosTotal || 0) }}
+      {{ roundNumber.format(store.votosTotal || 0) }}
     </h2>
     <div
       class="sm:grid sm:justify-items-center sm:place-items-center w-full p-4 sm:overflow-x-auto sm:space-x-4"
@@ -45,10 +45,16 @@ watch(
         />
       </div>
     </div>
-    <section class="text-left">
-      <pre>{{ store.segmentos?.['AHUACHAPAN'] }}</pre>
-    </section>
+    <UContainer as="section" class="text-left my-8 space-y-4">
+      <h2 class="text-center mb-4">
+        Diputados Electos a nivel {{ store.segmento }}
+      </h2>
+      <Segmento
+        v-for="(data, segmento) in store.segmentos"
+        :key="segmento"
+        :segmento="segmento"
+        :data="data"
+      />
+    </UContainer>
   </UContainer>
 </template>
-
-<style scoped></style>
