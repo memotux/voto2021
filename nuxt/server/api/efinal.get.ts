@@ -1,18 +1,7 @@
 import fs from 'node:fs'
 import { Window } from 'happy-dom'
-
-interface EFinalRequest {
-  query: {
-    publicacion?: string
-  }
-}
-
-interface EFinalData {
-  segmento: string
-  nom_partido: string
-  votos_partido: number
-  publicacion: string
-}
+import { diputadosXdepartamento } from "../utils";
+import type { BySegment, BySegmentData, EFinalData, EFinalRequest, SegmentPartidoData } from "../utils";
 
 const DATA_URL = '../data/efinal/'
 
@@ -26,7 +15,7 @@ const eFinalData = files.map((name) => {
   const document = window.document
   document.write(text)
 
-  const data = []
+  const data: EFinalData[] = []
 
   const actualizacion = document.body.querySelector('.fecha-actualizacion span')?.textContent
 
@@ -40,9 +29,7 @@ const eFinalData = files.map((name) => {
     const segmento = card.querySelector('.card-header a[href^="https://escrutinio"]')
       ?.textContent
       .split(' (ACTAS:')
-      .shift() || 'NACIONAL'
-
-    if (!segmento) return null
+      .shift() as Segmentos || 'NACIONAL'
 
     const rows = card.querySelectorAll('.card-body tr')
 
@@ -89,14 +76,43 @@ const eFinalData = files.map((name) => {
     return total
   }, 0)
 
-  const bySegment = data.reduce<Record<string, EFinalData[]>>((acc, cur) => {
+  const getSegments = data.reduce<Record<Segmentos, BySegmentData['raw']>>((acc, cur) => {
     if (cur.segmento in acc) {
-      acc[cur.segmento].push(cur)
+      acc[cur.segmento as Segmentos].push(cur)
     } else {
-      acc[cur.segmento] = [cur]
+      acc[cur.segmento as Segmentos] = [cur]
     }
     return acc
-  }, {})
+  }, {} as Record<Segmentos, BySegmentData['raw']>)
+
+  const bySegment = Object.entries(getSegments).reduce<BySegment>((acc, segment) => {
+    const [segmento, data] = segment as [Segmentos, EFinalData[]]
+    const votosTotal = data.reduce((total, partido) => {
+      return total + partido.votos_partido
+    }, 0)
+    const cocienteElectoral = votosTotal / diputadosXdepartamento[segmento]
+
+    const segmentPartidosData: SegmentPartidoData[] = data.map((partido) => {
+      const diputadosXcociente = partido.votos_partido / cocienteElectoral
+      const residuo = [partido.votos_partido % cocienteElectoral, 0] as [number, number]
+
+      return {
+        ...partido,
+        diputadosXcociente,
+        residuo,
+        diputadosXresiduo: [0, 0]
+      }
+    })
+
+    acc[segmento] = {
+      raw: data,
+      votosTotal,
+      cocienteElectoral,
+      data: segmentPartidosData
+    }
+
+    return acc
+  }, {} as BySegment)
 
   return {
     raw: data,
@@ -111,12 +127,12 @@ export default defineEventHandler<EFinalRequest>((event) => {
   const query = getQuery(event)
 
   if (!query.publicacion) {
-    const nacional = eFinalData.slice(-1)[0]
+    const latest = eFinalData.slice(-1)[0]
     return {
       data: {
-        publicacion: nacional?.publicacion,
-        votosTotal: nacional?.votosTotal,
-        segmentos: nacional?.bySegment,
+        publicacion: latest?.publicacion,
+        votosTotal: latest?.votosTotal,
+        segmentos: latest?.bySegment,
         publicaciones: eFinalData.map((d) => d?.publicacion)
       }
     }

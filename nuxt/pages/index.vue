@@ -45,6 +45,9 @@ watch(
         />
       </div>
     </div>
+    <section class="text-left">
+      <pre>{{ store.segmentos?.['AHUACHAPAN'] }}</pre>
+    </section>
   </UContainer>
 </template>
 

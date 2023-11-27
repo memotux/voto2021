@@ -1,13 +1,10 @@
+import type { BySegment } from '@/server/utils'
+
 interface StoreState {
   segmento: string
   publicacion?: string
   publicaciones?: string[]
-  segmentos?: Array<Record<string, {
-    segmento: string
-    nom_partido: string
-    votos_partido: number
-    publicacion: string
-  }>>
+  segmentos?: BySegment
   departamentos?: string[]
   votosTotal?: number
 }
