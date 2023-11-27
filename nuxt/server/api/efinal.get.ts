@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 import { Window } from 'happy-dom'
-import { diputadosXdepartamento } from "../utils";
-import type { BySegment, BySegmentData, EFinalData, EFinalRequest, SegmentPartidoData } from "../utils";
+import { diputadosXdepartamento } from "@/utils/index";
+import type { Segmentos, BySegment, BySegmentData, EFinalData, EFinalRequest, SegmentPartidoData } from "@/utils/types";
 
 const DATA_URL = '../data/efinal/'
 
