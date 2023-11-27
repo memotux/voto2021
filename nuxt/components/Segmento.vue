@@ -19,7 +19,7 @@ defineProps<{ segmento: Segmentos; data: BySegmentData }>()
       </template>
       <DefinitionList
         :items="[
-          ['Currules:', diputadosXdepartamento[segmento].toString()],
+          ['Curules:', diputadosXdepartamento[segmento].toString()],
           ['Votos:', roundNumber.format(data.votosTotal || 0)],
           ['Cociente:', roundNumber.format(data.cocienteElectoral || 0)],
         ]"
