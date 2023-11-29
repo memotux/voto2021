@@ -1,6 +1,6 @@
 <template>
   <header
-    class="dark:bg-blue-900 mb-7 grid grid-cols-2 justify-items-around place-items-center"
+    class="bg-blue-900 text-white mb-7 grid grid-cols-2 justify-items-around place-items-center"
   >
     <div class="mx-auto p-6">
       <h1 class="m-0 font-normal">

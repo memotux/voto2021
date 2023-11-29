@@ -57,6 +57,7 @@ watch(
         v-else
         :segmento="store.segmento"
         :data="store.segmentos![store.segmento]"
+        wrap
       />
     </UContainer>
   </UContainer>

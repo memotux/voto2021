@@ -2,15 +2,18 @@
 import { diputadosXdepartamento } from '@/utils'
 import type { BySegmentData, Segmentos } from '@/utils/types'
 
-defineProps<{ segmento: Segmentos; data: BySegmentData }>()
+defineProps<{ segmento: Segmentos; data: BySegmentData; wrap?: boolean }>()
 </script>
 
 <template>
-  <UContainer class="flex overflow-x-auto gap-4">
+  <UContainer
+    class="flex overflow-x-auto gap-4"
+    :class="{ 'flex-wrap justify-center': wrap }"
+  >
     <UCard
-      class="w-[24%] flex-shrink-0"
+      class="w-3/12 flex-shrink-0"
       :ui="{
-        background: 'bg-primary-50 dark:bg-primary-900',
+        background: 'bg-primary-200 dark:bg-primary-900',
         divide: 'divide-blue-800 dark:divide-blue-200',
       }"
     >
@@ -28,9 +31,9 @@ defineProps<{ segmento: Segmentos; data: BySegmentData }>()
     <UCard
       v-for="partido in data.data"
       :key="`${partido.publicacion}#${partido.nom_partido}`"
-      class="w-[22%] flex-shrink-0"
+      class="w-3/12 flex-shrink-0"
       :ui="{
-        background: 'bg-primary-100 dark:bg-primary-950',
+        background: 'bg-primary-50 dark:bg-primary-950',
         divide: 'divide-blue-700 dark:divide-blue-300',
       }"
     >
