@@ -30,11 +30,7 @@ watch(
     >
       <div>
         <p class="pb-2">Selecciona Departamento:</p>
-        <USelect
-          v-model="store.segmento"
-          size="md"
-          :options="store.departamentos"
-        />
+        <USelect v-model="store.segmento" size="md" :options="departamentos" />
       </div>
       <div>
         <p class="pb-2">Selecciona Publicacion:</p>
@@ -49,11 +45,18 @@ watch(
       <h2 class="text-center mb-4">
         Diputados Electos a nivel {{ store.segmento }}
       </h2>
+      <template v-if="store.segmento === 'NACIONAL'">
+        <Segmento
+          v-for="(data, segmento) in store.segmentos"
+          :key="segmento"
+          :segmento="segmento"
+          :data="data"
+        />
+      </template>
       <Segmento
-        v-for="(data, segmento) in store.segmentos"
-        :key="segmento"
-        :segmento="segmento"
-        :data="data"
+        v-else
+        :segmento="store.segmento"
+        :data="store.segmentos![store.segmento]"
       />
     </UContainer>
   </UContainer>

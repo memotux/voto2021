@@ -19,3 +19,5 @@ export const diputadosXdepartamento = {
   CABAÑAS: 3,
   NACIONAL: 84,
 }
+
+export const departamentos = Object.keys(diputadosXdepartamento).sort()

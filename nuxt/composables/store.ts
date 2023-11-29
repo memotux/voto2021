@@ -1,11 +1,10 @@
-import type { BySegment } from '@/server/utils'
+import type { BySegment, Segmentos } from '@/utils/types'
 
 interface StoreState {
-  segmento: string
+  segmento: Segmentos
   publicacion?: string
   publicaciones?: string[]
   segmentos?: BySegment
-  departamentos?: string[]
   votosTotal?: number
 }
 
