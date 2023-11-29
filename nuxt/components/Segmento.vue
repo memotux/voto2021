@@ -8,9 +8,9 @@ defineProps<{ segmento: Segmentos; data: BySegmentData }>()
 <template>
   <UContainer class="flex overflow-x-auto gap-4">
     <UCard
-      class="w-[23%] flex-shrink-0"
+      class="w-[24%] flex-shrink-0"
       :ui="{
-        background: 'bg-primary-100 dark:bg-primary-950',
+        background: 'bg-primary-50 dark:bg-primary-900',
         divide: 'divide-blue-800 dark:divide-blue-200',
       }"
     >
@@ -28,9 +28,9 @@ defineProps<{ segmento: Segmentos; data: BySegmentData }>()
     <UCard
       v-for="partido in data.data"
       :key="`${partido.publicacion}#${partido.nom_partido}`"
-      class="w-2/12 flex-shrink-0"
+      class="w-[22%] flex-shrink-0"
       :ui="{
-        background: 'bg-primary-50 dark:bg-primary-900',
+        background: 'bg-primary-100 dark:bg-primary-950',
         divide: 'divide-blue-700 dark:divide-blue-300',
       }"
     >
@@ -39,8 +39,23 @@ defineProps<{ segmento: Segmentos; data: BySegmentData }>()
       </template>
       <DefinitionList
         :items="[
-          ['por Cociente:', roundNumber.format(partido.diputadosXcociente)],
-          ['Residuo:', roundNumber.format(partido.residuo[0])],
+          ['Votos:', roundNumber.format(partido.votos_partido)],
+          [
+            'Residuo:',
+            roundNumber.format(partido.residuo[0] || partido.residuo[1]),
+          ],
+          [
+            'por Cociente/Residuo:',
+            `${roundNumber.format(
+              partido.diputadosXcociente,
+            )}/${roundNumber.format(partido.diputadosXresiduo[1])}`,
+          ],
+          [
+            'por Partido:',
+            roundNumber.format(
+              partido.diputadosXcociente + partido.diputadosXresiduo[0],
+            ),
+          ],
         ]"
       />
     </UCard>
