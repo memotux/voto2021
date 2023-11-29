@@ -11,7 +11,7 @@ defineProps<{ segmento: Segmentos; data: BySegmentData; wrap?: boolean }>()
     :class="{ 'flex-wrap justify-center': wrap }"
   >
     <UCard
-      class="w-3/12 flex-shrink-0"
+      class="w-2/12 flex-shrink-0"
       :ui="{
         background: 'bg-primary-200 dark:bg-primary-900',
         divide: 'divide-blue-800 dark:divide-blue-200',
@@ -31,7 +31,7 @@ defineProps<{ segmento: Segmentos; data: BySegmentData; wrap?: boolean }>()
     <UCard
       v-for="partido in data.data"
       :key="`${partido.publicacion}#${partido.nom_partido}`"
-      class="w-3/12 flex-shrink-0"
+      class="w-2/12 flex-shrink-0"
       :ui="{
         background: 'bg-primary-50 dark:bg-primary-950',
         divide: 'divide-blue-700 dark:divide-blue-300',
