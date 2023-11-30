@@ -1,9 +1,42 @@
 <script lang="ts" setup>
+import { barY, ruleY, dot, lineY } from '@observablehq/plot'
+
 useSeoMeta({
   title: 'Escrutinio Final',
   ogTitle: 'Escrutinio Final | Voto 2021 | Asamblea Legislativa',
 })
 const store = useStore()
+
+const options = computed(() => {
+  return {
+    x: { label: 'Partidos' },
+    y: {
+      label: 'Diputados',
+      domain: [0, diputadosXdepartamento[store.value.segmento]],
+      grid: true,
+      type: 'sqrt',
+    },
+    style: {
+      background: 'transparent',
+    },
+    width: 800,
+    marginBottom: 35,
+    color: {
+      type: 'categorical',
+      scheme: 'Set1',
+    },
+    marks: [
+      ruleY([0]),
+      barY(store.value.segmentos![store.value.segmento].data, {
+        x: 'nom_partido',
+        y: (d) => d.diputadosXcociente + d.diputadosXresiduo[1],
+        sort: { x: '-y' },
+        fill: 'nom_partido',
+        rx: 5,
+      }),
+    ],
+  }
+})
 
 watch(
   () => store.value.publicacion,
@@ -13,7 +46,7 @@ watch(
     })
     store.value.votosTotal = data.value.data.votosTotal
     store.value.segmentos = data.value.data.segmentos
-  },
+  }
 )
 </script>
 
@@ -30,7 +63,11 @@ watch(
     >
       <div>
         <p class="pb-2">Selecciona Departamento:</p>
-        <USelect v-model="store.segmento" size="md" :options="departamentos" />
+        <USelect
+          v-model="store.segmento"
+          size="md"
+          :options="departamentos"
+        />
       </div>
       <div>
         <p class="pb-2">Selecciona Publicacion:</p>
@@ -41,10 +78,15 @@ watch(
         />
       </div>
     </div>
-    <UContainer as="section" class="text-left my-8 space-y-4">
-      <h2 class="text-center mb-4">
-        Diputados Electos a nivel {{ store.segmento }}
-      </h2>
+    <UContainer
+      as="section"
+      class="text-left my-8 space-y-4"
+    >
+      <h2 class="text-center mb-4">Diputados Electos a nivel {{ store.segmento }}</h2>
+      <Plot
+        class="flex justify-center my-8 min-w-[640px] min-h-[400px]"
+        :options="options"
+      />
       <template v-if="store.segmento === 'NACIONAL'">
         <Segmento
           v-for="(data, segmento) in store.segmentos"
