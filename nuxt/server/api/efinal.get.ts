@@ -3,7 +3,7 @@ import { Window } from 'happy-dom'
 import { diputadosXdepartamento } from "@/utils/index";
 import type { Segmentos, BySegment, BySegmentData, EFinalData, EFinalRequest, SegmentPartidoData } from "@/utils/types";
 
-const DATA_URL = '../data/efinal/'
+const DATA_URL = '/Volumes/tuxevo/voto2021/nuxt/server/data/efinal/'
 
 const files = fs.readdirSync(DATA_URL, {
   encoding: 'utf-8',
