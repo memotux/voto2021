@@ -1,6 +1,6 @@
 <script setup lang="ts">
 useHead({
-  titleTemplate: titleChunk => {
+  titleTemplate: (titleChunk) => {
     return titleChunk
       ? `${titleChunk} | Voto 2021 | Asamblea Legislativa`
       : 'Voto 2021 | Asamblea Legislativa'
@@ -27,9 +27,7 @@ const { data } = await useFetch('/api/efinal', {
 
 store.value = {
   segmento: 'NACIONAL',
-  publicaciones: data.value.data.publicaciones.map((p: string) =>
-    p.split('#').pop(),
-  ),
+  publicaciones: data.value.data.publicaciones.map((p: string) => p.split('#').pop()),
   publicacion: store.value.publicaciones?.slice(-1).pop(),
   votosTotal: data.value.data.votosTotal,
   segmentos: data.value.data.segmentos,

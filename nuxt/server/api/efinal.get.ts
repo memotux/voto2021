@@ -43,7 +43,9 @@ const eFinalData = files.map((name) => {
     const segmento = card.querySelector('.card-header a[href^="https://escrutinio"]')
       ?.textContent
       .split(' (ACTAS:')
-      .shift() as Segmentos || 'NACIONAL'
+      .shift() as Segmentos
+
+    if (!segmento) continue
 
     const rows = card.querySelectorAll('.card-body tr')
 
@@ -84,10 +86,10 @@ const eFinalData = files.map((name) => {
   }
 
   const votosTotal = data.reduce((total, partido) => {
-    if (partido.segmento === 'NACIONAL') {
-      return total + partido.votos_partido
+    if (partido.nom_partido === 'TOTAL N-GANA' || partido.nom_partido === 'TOTAL ARENA-PCN') {
+      return total
     }
-    return total
+    return total + partido.votos_partido
   }, 0)
 
   const getSegments = data.reduce<Record<Segmentos, BySegmentData['raw']>>((acc, cur) => {
@@ -99,7 +101,16 @@ const eFinalData = files.map((name) => {
     return acc
   }, {} as Record<Segmentos, EFinalData[]>)
 
-  const bySegment = Object.entries(getSegments).reduce<BySegment>((acc, segment) => {
+  const bySegment: Partial<BySegment> = {
+    'NACIONAL': {
+      raw: [],
+      votosTotal,
+      cocienteElectoral: votosTotal / diputadosXdepartamento['NACIONAL'],
+      data: []
+    }
+  }
+
+  for (const segment of Object.entries(getSegments)) {
     const [segmento, data] = segment as [Segmentos, EFinalData[]]
     /**
      * Total de votos por segmento
@@ -173,7 +184,9 @@ const eFinalData = files.map((name) => {
 
     segmentPartidosData.sort((a, b) => b.residuo[0] - a.residuo[0])
 
-    segmentPartidosData.forEach((partido) => {
+    for (const partido of segmentPartidosData) {
+      if (diputadosFaltaAsignar[0] === 0) break
+
       if (diputadosFaltaAsignar[0]) {
         if (
           ['TOTAL N-GANA', 'TOTAL ARENA-PCN'].includes(
@@ -188,11 +201,13 @@ const eFinalData = files.map((name) => {
 
         diputadosFaltaAsignar[0] -= partido.diputadosXresiduo[0]
       }
-    })
+    }
 
     segmentPartidosData.sort((a, b) => b.residuo[1] - a.residuo[1])
 
-    segmentPartidosData.forEach((partido) => {
+    for (const partido of segmentPartidosData) {
+      if (!diputadosFaltaAsignar[1]) break
+
       if (diputadosFaltaAsignar[1]) {
         if (
           excludeVotosFromTotal(partido.segmento, partido.nom_partido)
@@ -205,22 +220,55 @@ const eFinalData = files.map((name) => {
 
         diputadosFaltaAsignar[1] -= partido.diputadosXresiduo[1]
       }
-    })
+    }
 
     segmentPartidosData.sort((a, b) => b.votos_partido - a.votos_partido)
+
+    for (const partido of segmentPartidosData) {
+      if (partido.nom_partido === 'N-GANA' || partido.nom_partido === 'ARENA-PCN') {
+        continue
+      }
+      const nom = partido.nom_partido.startsWith('TOTAL') ? partido.nom_partido.split(' ').pop() || partido.nom_partido : partido.nom_partido
+
+      const idx = bySegment['NACIONAL']!.data.findIndex(p => p.nom_partido === nom)
+
+      if (idx === -1) {
+        bySegment['NACIONAL']!.data.push({
+          ...partido,
+          segmento: 'NACIONAL',
+          nom_partido: nom
+        })
+        continue
+      }
+
+      const cur = bySegment['NACIONAL']!.data[idx]
+      bySegment['NACIONAL']!.data[idx] = {
+        ...cur,
+        votos_partido: cur.votos_partido + partido.votos_partido,
+        diputadosXcociente: cur.diputadosXcociente + partido.diputadosXcociente,
+        diputadosXresiduo: [
+          cur.diputadosXresiduo[0] + partido.diputadosXresiduo[0],
+          cur.diputadosXresiduo[1] + partido.diputadosXresiduo[1]
+        ],
+        residuo: [
+          cur.residuo[0] + partido.diputadosXresiduo[0],
+          cur.residuo[1] + partido.diputadosXresiduo[1]
+        ]
+      }
+    }
 
     /**
      * Data por segmento
      */
-    acc[segmento] = {
+    bySegment[segmento] = {
       raw: data,
       votosTotal,
       cocienteElectoral,
       data: segmentPartidosData
     }
+  }
 
-    return acc
-  }, {} as BySegment)
+  bySegment['NACIONAL']!.data.sort((a, b) => (b.diputadosXcociente + b.diputadosXresiduo[1]) - (a.diputadosXcociente + a.diputadosXresiduo[1]))
 
   /**
    * Data por actualizacion (archivo)
@@ -249,7 +297,7 @@ export default defineEventHandler<EFinalRequest>((event) => {
     }
   }
 
-  const publicacion = eFinalData.find(d => d?.publicacion.endsWith(query.publicacion || ''))
+  const publicacion = eFinalData.find(d => d?.publicacion.endsWith(query.publicacion || 'no-defined'))
 
   if (!publicacion) {
     throw createError({
@@ -265,6 +313,4 @@ export default defineEventHandler<EFinalRequest>((event) => {
       segmentos: publicacion?.bySegment,
     }
   }
-
-  // return ['hello', 'world']
 })
