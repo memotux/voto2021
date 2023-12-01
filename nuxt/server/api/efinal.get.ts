@@ -1,13 +1,17 @@
 import fs from 'node:fs'
+import { createResolver } from "nuxt/kit";
 import { Window } from 'happy-dom'
 import { diputadosXdepartamento } from "@/utils/index";
 import type { Segmentos, BySegment, BySegmentData, EFinalData, EFinalRequest, SegmentPartidoData } from "@/utils/types";
 
-const DATA_URL = '/Volumes/tuxevo/voto2021/nuxt/server/data/efinal/'
+const { resolve } = createResolver(import.meta.url)
+const DATA_URL = resolve('../../server/data/efinal/')
 
 const files = fs.readdirSync(DATA_URL, {
   encoding: 'utf-8',
 })
+
+console.log(files);
 
 function excludeVotosFromTotal(segmento: Segmentos, partido: string) {
   return [
@@ -21,7 +25,7 @@ function excludeVotosFromTotal(segmento: Segmentos, partido: string) {
 }
 
 const eFinalData = files.map((name) => {
-  const text = fs.readFileSync(`${DATA_URL}${name}`, { encoding: 'utf-8' })
+  const text = fs.readFileSync(`${DATA_URL}/${name}`, { encoding: 'utf-8' })
   const window = new Window()
   const document = window.document
   document.write(text)
@@ -262,4 +266,6 @@ export default defineEventHandler<EFinalRequest>((event) => {
       segmentos: publicacion?.bySegment,
     }
   }
+
+  // return ['hello', 'world']
 })
