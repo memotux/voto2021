@@ -5,13 +5,12 @@ import { diputadosXdepartamento } from "@/utils/index";
 import type { Segmentos, BySegment, BySegmentData, EFinalData, EFinalRequest, SegmentPartidoData } from "@/utils/types";
 
 const { resolve } = createResolver(import.meta.url)
-const DATA_URL = resolve('../../server/data/efinal/')
+const DATA_PATH = !process.dev ? '../../static/data/efinal/' : '../../public/data/efinal/'
+const DATA_URI = resolve(DATA_PATH)
 
-const files = fs.readdirSync(DATA_URL, {
+const files = fs.readdirSync(DATA_URI, {
   encoding: 'utf-8',
 })
-
-console.log(files);
 
 function excludeVotosFromTotal(segmento: Segmentos, partido: string) {
   return [
@@ -25,7 +24,7 @@ function excludeVotosFromTotal(segmento: Segmentos, partido: string) {
 }
 
 const eFinalData = files.map((name) => {
-  const text = fs.readFileSync(`${DATA_URL}/${name}`, { encoding: 'utf-8' })
+  const text = fs.readFileSync(`${DATA_URI}/${name}`, { encoding: 'utf-8' })
   const window = new Window()
   const document = window.document
   document.write(text)
