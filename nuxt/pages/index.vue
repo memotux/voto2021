@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { barY, ruleY, dot, lineY } from '@observablehq/plot'
+import { barY, ruleY } from '@observablehq/plot'
 
 useSeoMeta({
   title: 'Escrutinio Final',
@@ -7,20 +7,19 @@ useSeoMeta({
 })
 const store = useStore()
 
-const options = computed(() => {
+const graphOptions = computed(() => {
   return {
-    x: { label: 'Partidos' },
+    x: { label: 'Partidos', tickRotate: 50 },
     y: {
       label: 'Diputados',
       domain: [0, diputadosXdepartamento[store.value.segmento]],
       grid: true,
-      type: 'sqrt',
-    },
-    style: {
-      background: 'transparent',
+      type: store.value.segmento === 'NACIONAL' ? 'sqrt' : 'pow',
+      interval: 1,
     },
     width: 800,
-    marginBottom: 35,
+    marginBottom: 90,
+    className: 'votos-graph',
     color: {
       type: 'categorical',
       scheme: 'Set1',
@@ -85,7 +84,7 @@ watch(
       <h2 class="text-center mb-4">Diputados Electos a nivel {{ store.segmento }}</h2>
       <Plot
         class="flex justify-center my-8 min-w-[640px] min-h-[400px]"
-        :options="options"
+        :options="graphOptions"
       />
       <template v-if="store.segmento === 'NACIONAL'">
         <Segmento

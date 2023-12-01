@@ -10,3 +10,7 @@ h3 {
 main {
   @apply text-center;
 }
+
+.votos-graph {
+  @apply !bg-blue-950 p-8 rounded-lg;
+}
