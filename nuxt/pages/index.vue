@@ -40,11 +40,11 @@ const graphOptions = computed(() => {
 watch(
   () => store.value.publicacion,
   async () => {
-    const { data } = await useFetch('/api/efinal', {
+    const { data } = await useFetch<EFinalResponse>('/api/efinal', {
       query: { publicacion: store.value.publicacion },
     })
-    store.value.votosTotal = data.value.data.votosTotal
-    store.value.segmentos = data.value.data.segmentos
+    store.value.votosTotal = data.value!.data.votosTotal
+    store.value.segmentos = data.value!.data.segmentos
   }
 )
 </script>

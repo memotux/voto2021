@@ -8,6 +8,15 @@ export interface EFinalRequest {
   }
 }
 
+export interface EFinalResponse {
+  data: {
+    publicacion: string
+    votosTotal: number
+    segmentos: BySegment
+    publicaciones?: string[]
+  }
+}
+
 export interface EFinalData {
   segmento: Segmentos
   nom_partido: string

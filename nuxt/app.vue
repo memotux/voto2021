@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { EFinalResponse } from './utils/types'
+
 useHead({
   titleTemplate: (titleChunk) => {
     return titleChunk
@@ -21,16 +23,18 @@ useSeoMeta({
 
 const store = useStore()
 
-const { data } = await useFetch('/api/efinal', {
+const { data } = await useFetch<EFinalResponse>('/api/efinal', {
   key: 'efinal#nacional#latest',
 })
 
 store.value = {
   segmento: 'NACIONAL',
-  publicaciones: data.value.data.publicaciones.map((p: string) => p.split('#').pop()),
+  publicaciones: data.value!.data.publicaciones!.map(
+    (p: string) => p.split('#').pop() as string
+  ),
   publicacion: store.value.publicaciones?.slice(-1).pop(),
-  votosTotal: data.value.data.votosTotal,
-  segmentos: data.value.data.segmentos,
+  votosTotal: data.value!.data.votosTotal,
+  segmentos: data.value!.data.segmentos,
 }
 </script>
 
