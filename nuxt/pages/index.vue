@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { barY, ruleY } from '@observablehq/plot'
+import { barY, ruleY, text } from '@observablehq/plot'
 
 useSeoMeta({
   title: 'Escrutinio Final',
@@ -24,6 +24,10 @@ const graphOptions = computed(() => {
       type: 'categorical',
       scheme: 'Set1',
     },
+    style: {
+      fontSize: '12px',
+      cursor: 'pointer',
+    },
     marks: [
       ruleY([0]),
       barY(store.value.segmentos![store.value.segmento].data, {
@@ -32,6 +36,19 @@ const graphOptions = computed(() => {
         sort: { x: '-y' },
         fill: 'nom_partido',
         rx: 5,
+        tip: {
+          fill: 'rgb(23 37 84 / var(--tw-bg-opacity))',
+        },
+      }),
+      text(store.value.segmentos![store.value.segmento].data, {
+        x: 'nom_partido',
+        y: (d) => d.diputadosXcociente + d.diputadosXresiduo[1],
+        text: (d) => d.diputadosXcociente + d.diputadosXresiduo[1],
+        filter: (d) => d.diputadosXcociente + d.diputadosXresiduo[1] > 0,
+        lineAnchor: 'bottom',
+        fontSize: 14,
+        fontWeight: 'bold',
+        dy: -5,
       }),
     ],
   }
