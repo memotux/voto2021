@@ -17,6 +17,13 @@ export interface EFinalResponse {
   }
 }
 
+export interface ActualizacionData {
+  raw: EFinalData[],
+  votosTotal: number,
+  bySegment: BySegment
+  publicacion: string
+}
+
 export interface EFinalData {
   segmento: Segmentos
   nom_partido: string

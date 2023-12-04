@@ -11,5 +11,17 @@ export default defineNuxtConfig({
         type: 'image/png'
       }]
     }
+  },
+  nitro: {
+    storage: {
+      'data:efinal': {
+        driver: 'github',
+        repo: 'memotux/voto2021',
+        branch: 'master',
+        dir: '/nuxt/public/data/efinal',
+        token: process.env.GITHUB_TOKEN,
+        ttl: 86400
+      }
+    }
   }
 })
