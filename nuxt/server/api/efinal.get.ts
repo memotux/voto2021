@@ -6,17 +6,20 @@ export default defineEventHandler<EFinalRequest>(async (event) => {
 
   const eFinalData = await useStorage().getItem('data:efinal') as ActualizacionData[]
 
-  if (!query.publicacion) {
-    const latest = eFinalData.slice(-1)[0]
-    return {
-      data: {
-        publicacion: latest?.publicacion,
-        votosTotal: latest?.votosTotal,
-        segmentos: latest?.bySegment,
-        publicaciones: eFinalData.map((d) => d?.publicacion)
-      }
-    }
-  }
+  console.log(JSON.stringify(eFinalData));
+
+
+  // if (!query.publicacion) {
+  //   const latest = eFinalData.slice(-1)[0]
+  //   return {
+  //     data: {
+  //       publicacion: latest?.publicacion,
+  //       votosTotal: latest?.votosTotal,
+  //       segmentos: latest?.bySegment,
+  //       publicaciones: eFinalData.map((d) => d?.publicacion)
+  //     }
+  //   }
+  // }
 
   const publicacion = eFinalData.find(d => d?.publicacion.endsWith(query.publicacion || 'no-defined'))
 

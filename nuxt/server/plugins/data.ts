@@ -12,7 +12,7 @@ export default defineNitroPlugin(async () => {
     return generateFinalData(text) as ActualizacionData
   }))
 
-  console.log(JSON.stringify(dataValues, null, 2))
+  // console.log(JSON.stringify(dataValues, null, 2))
 
   useStorage().setItem<ActualizacionData[]>('data:efinal', dataValues)
 
