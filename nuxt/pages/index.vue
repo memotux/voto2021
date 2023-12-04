@@ -8,6 +8,7 @@ useSeoMeta({
 const store = useStore()
 
 const graphOptions = computed(() => {
+  if (!store.value.segmentos) return {}
   return {
     x: { label: 'Partidos', tickRotate: 50 },
     y: {
@@ -30,7 +31,7 @@ const graphOptions = computed(() => {
     },
     marks: [
       ruleY([0]),
-      barY(store.value.segmentos![store.value.segmento].data, {
+      barY(store.value.segmentos?.[store.value.segmento].data, {
         x: 'nom_partido',
         y: (d) => d.diputadosXcociente + d.diputadosXresiduo[1],
         sort: { x: '-y' },
@@ -40,7 +41,7 @@ const graphOptions = computed(() => {
           fill: 'rgb(23 37 84 / var(--tw-bg-opacity))',
         },
       }),
-      text(store.value.segmentos![store.value.segmento].data, {
+      text(store.value.segmentos?.[store.value.segmento].data, {
         x: 'nom_partido',
         y: (d) => d.diputadosXcociente + d.diputadosXresiduo[1],
         text: (d) => d.diputadosXcociente + d.diputadosXresiduo[1],

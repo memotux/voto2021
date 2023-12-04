@@ -18,7 +18,7 @@ export default defineNuxtConfig({
         driver: 'github',
         repo: 'memotux/voto2021',
         branch: 'master',
-        dir: '/nuxt/public/data/efinal',
+        dir: '/data/efinal',
         token: process.env.GITHUB_TOKEN,
         ttl: 86400
       }
