@@ -5,12 +5,14 @@ import type { Segmentos, BySegment, BySegmentData, EFinalData, SegmentPartidoDat
 export default defineNitroPlugin(async () => {
   const dataKeys = await useStorage('data:efinal').getKeys()
 
-  console.log({ dataKeys });
+  // console.log({ dataKeys });
 
   const dataValues = await Promise.all(dataKeys.map(async (k) => {
     const text = await useStorage('data:efinal').getItem(k) as string
     return generateFinalData(text) as ActualizacionData
   }))
+
+  console.log(JSON.stringify(dataValues, null, 2))
 
   useStorage().setItem<ActualizacionData[]>('data:efinal', dataValues)
 
