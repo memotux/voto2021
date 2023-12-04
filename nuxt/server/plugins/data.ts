@@ -14,7 +14,7 @@ export default defineNitroPlugin(async () => {
 
   // console.log(JSON.stringify(dataValues, null, 2))
 
-  useStorage().setItem<ActualizacionData[]>('data:efinal', dataValues)
+  await useStorage().setItem<ActualizacionData[]>('data:efinal', dataValues)
 
 })
 
