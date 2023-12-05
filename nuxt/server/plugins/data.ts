@@ -10,7 +10,7 @@ export default defineNitroPlugin(async () => {
     return generateFinalData(text) as ActualizacionData
   }))
 
-  useStorage().setItem<ActualizacionData[]>('data:efinal', dataValues)
+  useStorage().setItem<ActualizacionData[]>('values', dataValues)
 
 })
 

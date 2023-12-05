@@ -1,10 +1,9 @@
 import type { EFinalRequest, ActualizacionData } from "@/utils/types";
 
-
 export default defineEventHandler<EFinalRequest>(async (event) => {
   const query = getQuery(event)
 
-  const eFinalData = await useStorage().getItem('data:efinal') as ActualizacionData[]
+  const eFinalData = await useStorage().getItem('values') as ActualizacionData[]
 
   if (!query.publicacion) {
     const latest = eFinalData.slice(-1)[0]
