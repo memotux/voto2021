@@ -42,18 +42,14 @@ defineProps<{ segmento: Segmentos; data: BySegmentData; wrap?: boolean }>()
       </template>
       <DefinitionList
         :items="[
-          ['Votos:', roundNumber.format(partido.votos_partido)],
-          ['Residuo:', roundNumber.format(partido.residuo[0] || partido.residuo[1])],
-          [
-            'por Cociente/Residuo:',
-            `${roundNumber.format(partido.diputadosXcociente)}/${roundNumber.format(
-              partido.diputadosXresiduo[1]
-            )}`,
-          ],
+          ['TSE:', partido.tse.toLocaleString()],
+          ['Diputados:', `${partido.diputadosXcociente + partido.diputadosXresiduo[1]}`],
           [
             'por Partido:',
-            roundNumber.format(partido.diputadosXcociente + partido.diputadosXresiduo[0]),
+            (partido.diputadosXcociente + partido.diputadosXresiduo[0]).toLocaleString(),
           ],
+          ['Votos:', roundNumber.format(partido.votos_partido)],
+          ['Residuo:', roundNumber.format(partido.residuo[0] || partido.residuo[1])],
         ]"
       />
     </UCard>

@@ -1,16 +1,36 @@
 import { Window } from 'happy-dom'
 import { diputadosXdepartamento } from "@/utils/index";
-import type { Segmentos, BySegment, BySegmentData, EFinalData, SegmentPartidoData, ActualizacionData } from "@/utils/types";
+import type { Segmentos, BySegment, BySegmentData, EFinalData, SegmentPartidoData, ActualizacionData, TSEData } from "@/utils/types";
 
 export default defineNitroPlugin(async () => {
-  const dataKeys = await useStorage('data:efinal').getKeys()
+  try {
+    const dataKeys = await useStorage<string>('data:efinal').getKeys()
+    const efinal = dataKeys.filter(k => k.startsWith('efinal'))
+    // const epreliminar = dataKeys.filter(k => k.startsWith('epreliminar'))
+    const mcText = await useStorage<{ diputadosTSE: TSEData[] }>('data:efinal').getItem('mc.json')
 
-  const dataValues = await Promise.all(dataKeys.map(async (k) => {
-    const text = await useStorage('data:efinal').getItem(k) as string
-    return generateFinalData(text) as ActualizacionData
-  }))
+    if (!mcText) {
+      throw createError('No MC Data')
+    }
 
-  useStorage().setItem<ActualizacionData[]>('values', dataValues)
+    const { diputadosTSE } = mcText
+
+    const dataValues = await Promise.all(efinal.map(async (k) => {
+      const text = await useStorage<string>('data:efinal').getItem(k)
+      if (!text) {
+        throw createError(`Publicacion ${k} Data not exist.`)
+      }
+      const data = generateFinalData(text, diputadosTSE)
+      if (!data) {
+        throw createError(`Error generating data: ${k}`)
+      }
+      return data
+    }))
+
+    useStorage().setItem<ActualizacionData[]>('values:efinal', dataValues)
+  } catch (error) {
+    console.error(error);
+  }
 
 })
 
@@ -25,7 +45,7 @@ function excludeVotosFromTotal(segmento: Segmentos, partido: string) {
     ['N', 'GANA', 'N-GANA', 'ARENA-PCN'].includes(partido)
 }
 
-const generateFinalData = (text: string): ActualizacionData | null => {
+const generateFinalData = (text: string, tse: TSEData[]): ActualizacionData | null => {
   const window = new Window()
   const document = window.document
   document.write(text)
@@ -244,6 +264,7 @@ const generateFinalData = (text: string): ActualizacionData | null => {
         ...partido,
         diputadosXcociente,
         residuo,
+        tse: tse.find(d => d.fieldValue === segmento)?.nodes.find(p => p.partido === partido.nom_partido)?.diputados || 0,
         diputadosXresiduo: [0, 0]
       }
     })
@@ -309,16 +330,19 @@ const generateFinalData = (text: string): ActualizacionData | null => {
 
     segmentPartidosData.sort((a, b) => b.votos_partido - a.votos_partido)
 
+    /**
+     * NACIONAL Segment
+     */
     for (const partido of segmentPartidosData) {
       if (partido.nom_partido === 'N-GANA' || partido.nom_partido === 'ARENA-PCN') {
         continue
       }
       const nom = partido.nom_partido.startsWith('TOTAL') ? partido.nom_partido.split(' ').pop() || partido.nom_partido : partido.nom_partido
 
-      const idx = bySegment['NACIONAL']!.data.findIndex(p => p.nom_partido === nom)
+      const idx = bySegment['NACIONAL'].data.findIndex(p => p.nom_partido === nom)
 
       if (idx === -1) {
-        bySegment['NACIONAL']!.data.push({
+        bySegment['NACIONAL'].data.push({
           ...partido,
           segmento: 'NACIONAL',
           nom_partido: nom
@@ -326,8 +350,8 @@ const generateFinalData = (text: string): ActualizacionData | null => {
         continue
       }
 
-      const cur = bySegment['NACIONAL']!.data[idx]
-      bySegment['NACIONAL']!.data[idx] = {
+      const cur = bySegment['NACIONAL'].data[idx]
+      bySegment['NACIONAL'].data[idx] = {
         ...cur,
         votos_partido: cur.votos_partido + partido.votos_partido,
         diputadosXcociente: cur.diputadosXcociente + partido.diputadosXcociente,
@@ -338,7 +362,7 @@ const generateFinalData = (text: string): ActualizacionData | null => {
         residuo: [
           cur.residuo[0] + partido.diputadosXresiduo[0],
           cur.residuo[1] + partido.diputadosXresiduo[1]
-        ]
+        ],
       }
     }
 
@@ -353,7 +377,11 @@ const generateFinalData = (text: string): ActualizacionData | null => {
     }
   }
 
-  bySegment['NACIONAL']!.data.sort((a, b) => (b.diputadosXcociente + b.diputadosXresiduo[1]) - (a.diputadosXcociente + a.diputadosXresiduo[1]))
+  for (const partido of bySegment['NACIONAL'].data) {
+    partido.tse = tse.find(d => d.fieldValue === 'NACIONAL')?.nodes.find(p => p.partido === partido.nom_partido)?.diputados || 0
+  }
+
+  bySegment['NACIONAL'].data.sort((a, b) => (b.diputadosXcociente + b.diputadosXresiduo[1]) - (a.diputadosXcociente + a.diputadosXresiduo[1]))
 
   /**
    * Data por actualizacion (archivo)

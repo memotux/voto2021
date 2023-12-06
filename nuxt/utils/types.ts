@@ -34,6 +34,7 @@ export interface SegmentPartidoData extends EFinalData {
   diputadosXcociente: number
   diputadosXresiduo: [number, number]
   residuo: [number, number]
+  tse: number
 }
 
 export interface BySegmentData {
@@ -44,3 +45,13 @@ export interface BySegmentData {
 }
 
 export type BySegment = Record<Segmentos, BySegmentData>
+
+export interface TSEData {
+  nodes: Partido[]
+  fieldValue: string
+}
+
+export interface Partido {
+  partido: string
+  diputados: number
+}
