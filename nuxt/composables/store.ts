@@ -6,8 +6,10 @@ interface StoreState {
   publicaciones?: string[]
   segmentos?: BySegment
   votosTotal?: number
+  loading: boolean
 }
 
 export const useStore = () => useState<StoreState>('store', () => ({
-  segmento: 'NACIONAL'
+  segmento: 'NACIONAL',
+  loading: false
 }))

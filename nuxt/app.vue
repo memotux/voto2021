@@ -23,7 +23,7 @@ useSeoMeta({
 
 const store = useStore()
 
-const { data } = await useFetch<EFinalResponse>('/api/efinal', {
+const { data, pending } = await useFetch<EFinalResponse>('/api/efinal', {
   key: 'efinal#nacional#latest',
 })
 
@@ -35,6 +35,7 @@ store.value = {
   publicacion: store.value.publicaciones?.slice(-1).pop(),
   votosTotal: data.value!.data.votosTotal,
   segmentos: data.value!.data.segmentos,
+  loading: pending.value,
 }
 </script>
 

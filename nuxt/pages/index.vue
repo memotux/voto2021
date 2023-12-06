@@ -41,7 +41,7 @@ const graphOptions = computed(() => {
           fill: 'rgb(23 37 84 / var(--tw-bg-opacity))',
         },
       }),
-      text(store.value.segmentos?.[store.value.segmento].data, {
+      text(store.value.segmentos[store.value.segmento].data, {
         x: 'nom_partido',
         y: (d) => d.diputadosXcociente + d.diputadosXresiduo[1],
         text: (d) => d.diputadosXcociente + d.diputadosXresiduo[1],
@@ -58,17 +58,33 @@ const graphOptions = computed(() => {
 watch(
   () => store.value.publicacion,
   async () => {
-    const { data } = await useFetch<EFinalResponse>('/api/efinal', {
-      query: { publicacion: store.value.publicacion },
-    })
-    store.value.votosTotal = data.value!.data.votosTotal
-    store.value.segmentos = data.value!.data.segmentos
+    try {
+      store.value.loading = true
+      const { data } = await useFetch<EFinalResponse>('/api/efinal', {
+        query: { publicacion: store.value.publicacion },
+      })
+      if (data.value) {
+        store.value.votosTotal = data.value.data.votosTotal
+        store.value.segmentos = data.value.data.segmentos
+      } else {
+        throw createError('Fetch Publicacion failed')
+      }
+    } catch (error) {
+      console.error(error)
+    } finally {
+      store.value.loading = false
+    }
   }
 )
 </script>
 
 <template>
   <UContainer as="main">
+    <UModal v-model="store.loading">
+      <div class="w-full h-24 flex justify-center items-center text-primary-400">
+        <IconLoading class="h-12 w-12" />
+      </div>
+    </UModal>
     <h1>Escrutinio Final</h1>
     <h2>
       Total de votos:
