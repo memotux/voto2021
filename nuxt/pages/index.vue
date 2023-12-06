@@ -80,11 +80,16 @@ watch(
 
 <template>
   <UContainer as="main">
-    <UModal v-model="store.loading">
-      <div class="w-full h-24 flex justify-center items-center text-primary-400">
-        <IconLoading class="h-12 w-12" />
+    <div
+      v-show="store.loading"
+      class="fixed top-0 left-0 w-screen h-screen flex justify-center items-center bg-primary-400/25 z-50 pointer-events-none"
+    >
+      <div
+        class="w-16 h-16 mx-auto text-primary-400 flex justify-center items-center bg-primary-900/75 shadow-lg rounded-lg p-4"
+      >
+        <IconLoading />
       </div>
-    </UModal>
+    </div>
     <h1>Escrutinio Final</h1>
     <h2>
       Total de votos:
