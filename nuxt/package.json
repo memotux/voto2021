@@ -21,5 +21,10 @@
   "dependencies": {
     "@memotux/vue-plot": "file:memotux-vue-plot-0.4.0-beta.1.tgz",
     "@observablehq/plot": "^0.6.11"
+  },
+  "pnpm": {
+    "overrides": {
+      "vite": "npm:rolldown-vite@latest"
+    }
   }
 }
