@@ -1,5 +1,8 @@
+import { plotCustomElement } from "@memotux/vue-plot";
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  compatibilityDate: '2025-06-06',
   devtools: { enabled: true },
   modules: ["@nuxt/ui"],
   css: ['assets/styles/global.css'],
@@ -11,6 +14,9 @@ export default defineNuxtConfig({
         type: 'image/png'
       }]
     }
+  },
+  vite: {
+    vue: plotCustomElement
   },
   nitro: {
     storage: {

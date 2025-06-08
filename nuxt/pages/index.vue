@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import { barY, ruleY, text } from '@observablehq/plot'
+import { VPlot } from '@memotux/vue-plot'
+import type { BarYOptions, Data, PlotOptions, TextOptions } from '@observablehq/plot'
 
 useSeoMeta({
   title: 'Escrutinio Final',
@@ -7,7 +8,35 @@ useSeoMeta({
 })
 const store = useStore()
 
-const graphOptions = computed(() => {
+const barOptions = computed(() => {
+  return <BarYOptions & { data: Data }>{
+    data: store.value.segmentos?.[store.value.segmento].data,
+    x: 'nom_partido',
+    y: (d: SegmentPartidoData) => d.diputadosXcociente + d.diputadosXresiduo[1],
+    sort: { x: '-y' },
+    fill: 'nom_partido',
+    rx: 5,
+    tip: {
+      fill: 'rgb(23 37 84 / var(--tw-bg-opacity))',
+    },
+  }
+})
+
+// const textOptions = computed(() => {
+//   return <TextOptions & { data: Data }>{
+//     data: store.value.segmentos?.[store.value.segmento].data,
+//     x: 'nom_partido',
+//     y: (d: SegmentPartidoData) => d.diputadosXcociente + d.diputadosXresiduo[1],
+//     text: (d: SegmentPartidoData) => d.diputadosXcociente + d.diputadosXresiduo[1],
+//     filter: (d: SegmentPartidoData) => d.diputadosXcociente + d.diputadosXresiduo[1] > 0,
+//     lineAnchor: 'bottom',
+//     fontSize: 14,
+//     fontWeight: 'bold',
+//     dy: -5,
+//   }
+// })
+
+const graphOptions = computed<PlotOptions>(() => {
   if (!store.value.segmentos) return {}
   return {
     x: { label: 'Partidos', tickRotate: 50 },
@@ -29,29 +58,6 @@ const graphOptions = computed(() => {
       fontSize: '12px',
       cursor: 'pointer',
     },
-    marks: [
-      ruleY([0]),
-      barY(store.value.segmentos?.[store.value.segmento].data, {
-        x: 'nom_partido',
-        y: (d) => d.diputadosXcociente + d.diputadosXresiduo[1],
-        sort: { x: '-y' },
-        fill: 'nom_partido',
-        rx: 5,
-        tip: {
-          fill: 'rgb(23 37 84 / var(--tw-bg-opacity))',
-        },
-      }),
-      text(store.value.segmentos[store.value.segmento].data, {
-        x: 'nom_partido',
-        y: (d) => d.diputadosXcociente + d.diputadosXresiduo[1],
-        text: (d) => d.diputadosXcociente + d.diputadosXresiduo[1],
-        filter: (d) => d.diputadosXcociente + d.diputadosXresiduo[1] > 0,
-        lineAnchor: 'bottom',
-        fontSize: 14,
-        fontWeight: 'bold',
-        dy: -5,
-      }),
-    ],
   }
 })
 
@@ -60,12 +66,12 @@ watch(
   async () => {
     try {
       store.value.loading = true
-      const { data } = await useFetch<EFinalResponse>('/api/efinal', {
+      const { data } = await $fetch<EFinalResponse>('/api/efinal', {
         query: { publicacion: store.value.publicacion },
       })
-      if (data.value) {
-        store.value.votosTotal = data.value.data.votosTotal
-        store.value.segmentos = data.value.data.segmentos
+      if (data) {
+        store.value.votosTotal = data.votosTotal
+        store.value.segmentos = data.segmentos
       } else {
         throw createError('Fetch Publicacion failed')
       }
@@ -121,10 +127,26 @@ watch(
       class="text-left my-8 space-y-4"
     >
       <h2 class="text-center mb-4">Diputados Electos a nivel {{ store.segmento }}</h2>
-      <Plot
+      <VPlot
         class="flex justify-center my-8 min-w-[640px] min-h-[400px]"
-        :options="graphOptions"
-      />
+        v-bind="graphOptions"
+      >
+        <PlotRuleY :data="[0]" />
+        <PlotBarY v-bind="barOptions" />
+        <PlotText
+          :data="store.segmentos?.[store.segmento].data"
+          x="nom_partido"
+          :y="(d: SegmentPartidoData) => d.diputadosXcociente + d.diputadosXresiduo[1]"
+          :text="(d: SegmentPartidoData) => d.diputadosXcociente + d.diputadosXresiduo[1]"
+          :filter="
+            (d: SegmentPartidoData) => d.diputadosXcociente + d.diputadosXresiduo[1] > 0
+          "
+          lineAnchor="bottom"
+          :fontSize="14"
+          fontWeight="bold"
+          :dy="-5"
+        />
+      </VPlot>
       <template v-if="store.segmento === 'NACIONAL'">
         <Segmento
           v-for="(data, segmento) in store.segmentos"

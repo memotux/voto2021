@@ -19,6 +19,7 @@
     "vue-router": "^4.2.5"
   },
   "dependencies": {
+    "@memotux/vue-plot": "file:memotux-vue-plot-0.4.0-beta.1.tgz",
     "@observablehq/plot": "^0.6.11"
   }
 }
