@@ -20,5 +20,6 @@
   },
   "bugs": {
     "url": "https://github.com/memotux/voto2021/issues"
-  }
+  },
+  "packageManager": "pnpm@10.11.1"
 }
